@@ -13,21 +13,20 @@ public class MusicBean {
     private int albumId;//专辑id
     private String albumName; //专辑名称
     private long duration; //歌曲时长
+    private String sDuration;//歌曲时长字符串
     private String path; //歌曲路径
     private long size;//歌曲大小
+    private boolean isCheck;//当前歌曲选中
 
     public MusicBean() {
     }
 
-    public MusicBean(int songId, String songName, String singer, int albumId, String albumName, long duration, String path, long size) {
-        this.songId = songId;
+    public MusicBean( String songName, String singer, String albumName, String sDuration,String path) {
         this.songName = songName;
         this.singer = singer;
-        this.albumId = albumId;
         this.albumName = albumName;
-        this.duration = duration;
+        this.sDuration = sDuration;
         this.path = path;
-        this.size = size;
     }
 
     public int getSongId() {
@@ -92,5 +91,21 @@ public class MusicBean {
 
     public void setSize(long size) {
         this.size = size;
+    }
+
+    public String getsDuration() {
+        return sDuration;
+    }
+
+    public void setsDuration(String sDuration) {
+        this.sDuration = sDuration;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
     }
 }

@@ -1,9 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.LocalMusicActivity">
+    tools:context=".ui.LocalMusicActivity"
+    android:background="@color/background">
+<RelativeLayout
+    android:id="@+id/local_top_layout"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/local_top"
+    >
+    <TextView
+        android:id="@+id/local_top_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="我的单曲"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:layout_centerInParent="true"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/local_top_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignBottom="@id/local_top_text"
+        android:src="@mipmap/icon_back"/>
+
+</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/local_music_bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:background="@color/Local_button">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/line_layout"
+            android:layout_alignParentTop="true"
+            android:background="#D6D4D4">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/local_music_bottom_iv_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/music_logo" />
+
+
+        <TextView
+            android:id="@+id/local_music_bottom_tv_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_toRightOf="@id/local_music_bottom_iv_icon"
+            android:maxLines="1"
+            android:text="歌曲"
+            android:textColor="@color/front_song"
+            android:textSize="18dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/local_music_bottom_tv_singer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/local_music_bottom_tv_song"
+            android:layout_alignBottom="@+id/local_music_bottom_tv_song"
+            android:text="歌手"
+            android:textColor="@color/front_singer"
+            android:textSize="13dp" />
+
+        <ImageView
+            android:id="@+id/local_music_bottom_iv_line"
+            android:layout_width="8dp"
+            android:layout_height="2dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="-24dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toRightOf="@id/local_music_bottom_tv_song"
+            android:background="#838282" />
+
+        <ImageView
+            android:id="@+id/local_music_bottom_iv_list"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:src="@mipmap/icon_list" />
+
+        <ImageView
+            android:id="@+id/local_music_bottom_iv_play"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@id/local_music_bottom_iv_list"
+            android:src="@mipmap/icon_play" />
+    </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/local_music_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/local_top_layout"
+        android:layout_above="@+id/local_music_bottomLayout"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
+
+</RelativeLayout>

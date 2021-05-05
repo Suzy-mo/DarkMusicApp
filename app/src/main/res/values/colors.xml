@@ -8,6 +8,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="cloud_black">#201D1D</color>
-    <color name="colorPrimary">#0E0E0E</color>
+    <color name="colorPrimary">#191515</color>
     <color name="colorPrimaryDark">#5D656C</color>
+    <color name="background">#EAEBEC</color>
+    <color name="front_song">#121111</color>
+    <color name="front_singer">#515050</color>
+    <color name="local_top">#F0F4F6</color>
+    <color name="Local_button">#FBFAFA</color>
 </resources>

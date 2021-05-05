@@ -30,7 +30,7 @@
       <option name="IGNORE_JAVADOC_PERIOD" value="true" />
       <option name="IGNORE_DUPLICATED_THROWS" value="false" />
       <option name="IGNORE_POINT_TO_ITSELF" value="false" />
-      <option name="myAdditionalJavadocTags" value="Name：NextWorkUtils,Description：,Author：Suzy.Mo,Date：2021/5/4,Description：进行网络请求,Name：PermissionUtils,Description：申请权限,return,description,time,Description：本地音乐实体类,Name：localMusicBean" />
+      <option name="myAdditionalJavadocTags" value="Name：NextWorkUtils,Description：,Author：Suzy.Mo,Date：2021/5/4,Description：进行网络请求,Name：PermissionUtils,Description：申请权限,return,description,time,Description：本地音乐实体类,Name：localMusicBean,Name：,Date：" />
     </inspection_tool>
   </profile>
 </component>
