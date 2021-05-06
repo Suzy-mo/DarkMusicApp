@@ -1,18 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:id="@+id/main_search"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/Local_button"
+        android:onClick="SearchLayout"
+        >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/main_search_menu"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/icon_list" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/main_search_layout"
+            android:layout_width="360dp"
+            android:layout_height="45dp"
+            android:layout_toRightOf="@id/main_search_menu"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="30dp"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#E1E1E1"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                android:layout_marginLeft="20dp"
+                app:cardElevation="0dp">
+                <ImageView
+                    android:id="@+id/main_search_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/icon_search" />
+            </androidx.cardview.widget.CardView>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_search"
+        android:layout_marginTop="30dp">
+
+        <RelativeLayout
+            android:id="@+id/main_center_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/main_banner_layout"
+                android:layout_width="match_parent"
+                android:layout_height="180dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="2dp">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/viewpager2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/main_music_banner_icon"
+                        android:src="@mipmap/music_logo"/>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <LinearLayout
+                    android:id="@+id/container_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="7dp"
+                    android:orientation="horizontal" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="700dp"
+                android:layout_below="@+id/main_banner_layout"
+                android:background="@mipmap/ic_launcher_round" />
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:background="@color/Local_button">
+        <RelativeLayout
+            android:id="@+id/main_music_bottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/line_layout"
+                android:layout_alignParentTop="true"
+                android:background="#D6D4D4">
+
+            </ImageView>
+
+            <ImageView
+                android:id="@+id/main_music_bottom_iv_album"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/music_logo" />
+
+
+            <TextView
+                android:id="@+id/main_music_bottom_tv_song"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_toRightOf="@id/main_music_bottom_iv_album"
+                android:maxLines="1"
+                android:text="歌曲"
+                android:textColor="@color/front_song"
+                android:textSize="18dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/main_music_bottom_tv_singer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/main_music_bottom_tv_song"
+                android:layout_alignBottom="@+id/main_music_bottom_tv_song"
+                android:text="歌手"
+                android:textColor="@color/front_singer"
+                android:textSize="13dp" />
+
+            <ImageView
+                android:id="@+id/main_music_bottom_iv_line"
+                android:layout_width="8dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginLeft="-24dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@id/main_music_bottom_tv_song"
+                android:background="#838282" />
+
+            <ImageView
+                android:id="@+id/main_music_bottom_iv_list"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:src="@mipmap/icon_list" />
+
+            <ImageView
+                android:id="@+id/main_music_bottom_iv_play"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@id/main_music_bottom_iv_list"
+                android:src="@mipmap/icon_play" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/main_button_choice"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:cardElevation="5dp"
+                app:cardCornerRadius="25dp"
+                >
+
+                <ImageView
+                    android:id="@+id/main_bottom_my_music"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@mipmap/icon_choice" />
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

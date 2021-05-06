@@ -15,7 +15,9 @@
         android:roundIcon="@drawable/starting_bg"
         android:supportsRtl="true"
         android:theme="@style/Theme.DarkCloudApp">
-        <activity android:name=".ui.StartActivity"
+        <activity android:name=".ui.SearchActivity"></activity>
+        <activity
+            android:name=".ui.StartActivity"
             android:theme="@style/StartTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.LocalMusicActivity" />
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

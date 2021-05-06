@@ -120,7 +120,6 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.local_music_bottom_iv_play:
-                Intent intent = new Intent(this,MainActivity.class);
             case R.id.local_music_bottom_iv_list:
                 Toast.makeText(this,"没有菜单",Toast.LENGTH_SHORT).show();
             case R.id.local_music_bottomLayout:

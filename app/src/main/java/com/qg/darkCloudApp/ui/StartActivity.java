@@ -20,14 +20,14 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_activity);
-        tvMusic = (TextView)findViewById(R.id.textView);
-        tvEmpty = (TextView)findViewById(R.id.tv_empty);
+        tvMusic = findViewById(R.id.textView);
+        tvEmpty = findViewById(R.id.tv_empty);
         Thread myThread = new Thread() {
             @Override
             public void run() {
                 try {
                     sleep(2000);
-                    Intent intent = new Intent(getApplicationContext(), LocalMusicActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();
                 } catch (Exception e) {
