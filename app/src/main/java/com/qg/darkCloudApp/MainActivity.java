@@ -4,9 +4,12 @@ import androidx.annotation.LongDef;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qg.darkCloudApp.Adapter.ViewPagerAdapter;
+import com.qg.darkCloudApp.bean.MusicBean;
+import com.qg.darkCloudApp.model.Utils.DataUtils;
+import com.qg.darkCloudApp.server.Audio;
 import com.qg.darkCloudApp.ui.LocalMusicActivity;
 import com.qg.darkCloudApp.ui.SearchActivity;
 import com.qg.darkCloudApp.ui.StartActivity;
@@ -43,6 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private String GAT = "MainActivity";
     Intent intent;
+    Intent intentServer;
+
+    MyConnection myConnection;
+    Audio.Finder controller;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +106,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listIv.setOnClickListener(this);
         playIv.setOnClickListener(this);
         changeIv.setOnClickListener(this);
-
+        //服务的设置
+        intentServer = new Intent(this,Audio.class);
     }
 
     /**
@@ -149,9 +161,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             }
-            case R.id.main_music_bottom_iv_play:
+            case R.id.main_music_bottom_iv_play:{
+                //intentServer.putExtra("play",1);
+                //MainActivity.this.startService(intentServer);
+                //intentServer.putExtra("path", )
+                //myConnection = new MyConnection();//建立新的对象
+                //bindService(intentServer,myConnection,BIND_AUTO_CREATE);
                 Toast.makeText(this,"播放音乐",Toast.LENGTH_SHORT).show();
                 break;
+            }
             case R.id.main_music_bottom_iv_list:
                 Toast.makeText(this,"没有列表",Toast.LENGTH_SHORT).show();
                 break;
@@ -160,6 +178,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
+    }
+
+    class MyConnection implements ServiceConnection {//控制连接实现mediaPlay的调用
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            controller= (Audio.Finder) service;//获取控制连接对象
+            int duration = controller.getDuration();//获取音乐总时长
+            //textView2.setText(DataUtils.formatTime(duration));//设置总时长
+            //seekBar.setMax(duration);//设置进度条的最大值
+            //Update();//提醒进度条更新
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
     }
 
     public void SearchLayout(View view) {

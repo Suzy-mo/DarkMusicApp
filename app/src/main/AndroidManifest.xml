@@ -15,7 +15,12 @@
         android:roundIcon="@drawable/starting_bg"
         android:supportsRtl="true"
         android:theme="@style/Theme.DarkCloudApp">
-        <activity android:name=".ui.SearchActivity"></activity>
+        <service
+            android:name=".server.Audio"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".ui.SearchActivity" />
         <activity
             android:name=".ui.StartActivity"
             android:theme="@style/StartTheme">
@@ -26,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.LocalMusicActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

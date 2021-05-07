@@ -4,10 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.ObjectAnimator;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.nfc.Tag;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,12 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qg.darkCloudApp.Adapter.LocalMusicAdapter;
-import com.qg.darkCloudApp.MainActivity;
 import com.qg.darkCloudApp.R;
 import com.qg.darkCloudApp.bean.MusicBean;
 import com.qg.darkCloudApp.model.Utils.MusicUtils;
+import com.qg.darkCloudApp.server.Audio;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.qg.darkCloudApp.model.Utils.PermissionUtils.verifyStoragePermissions;
@@ -32,31 +32,37 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
     //ObjectAnimator animator;
     List<MusicBean> mDatas;//数据源
     private int oldPosition = -1;
+    int mCurrentPlayPosition = -1;//记录当前正在播放的音乐的位置
+    int mCurrentPausePositionInSong = 0;//记录暂停音乐时进度条的位置
+    int isPlaying = 0;//记录当前是否在播放
     private LocalMusicAdapter adapter;
     private String TAG = "LocalMusicActivity";
+
+    Intent intentServer;
+    MyConnection myConnection;
+    Audio.Finder controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.local_music_activity);
-        verifyStoragePermissions(this);
-        initView();
-        getMusicList();
-
-
+        verifyStoragePermissions(this);//默认允许获取权限
+        initView();//初始化
+        getMusicList();//获取本地列表并展示
+        setEventListener();//设置监听
     }
 
     private void getMusicList() {
         //将扫描到的音乐赋值给音乐列表
-        Log.d(TAG,"进入了函数");
+        Log.d(TAG,"进入了获取函数getMusicList");
         mDatas = MusicUtils.loadLocalMusicData(this);
         Log.d(TAG,"扫描完成");
         if (mDatas != null && mDatas.size() > 0) {
-            Log.d(TAG,"选择1");
+            Log.d(TAG,"选择显示本地列表");
             //显示本地音乐
             showLocalMusicData();
         } else {
-            Log.d(TAG,"选择2");
+            Log.d(TAG,"本地列表为空");
             Toast.makeText(this, "本地音乐库为空", Toast.LENGTH_SHORT).show();
         }
     }
@@ -69,8 +75,8 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
         //设置布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         musicRv.setLayoutManager(layoutManager);
-        setEventListener();
         adapter.notifyDataSetChanged();
+        Log.d(TAG,"适配完成");
     }
 
     private void setEventListener() {
@@ -78,28 +84,50 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
         adapter.setOnItemClickListener(new LocalMusicAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(View view, int position) {
-                if (view.getId() == R.id.item_music) {
-
-                    if (oldPosition == -1) {
-                        //未点击过 第一次点击
-                        oldPosition = position;
-                        mDatas.get(position).setCheck(true);
-                    } else {
-                        //大于 1次
-                        if (oldPosition != position) {
-                            mDatas.get(oldPosition).setCheck(false);
-                            mDatas.get(position).setCheck(true);
-                            //重新设置位置，当下一次点击时position又会和oldPosition不一样
-                            oldPosition = position;
-                        }
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-                MusicBean musicBean = mDatas.get(oldPosition);
-                Log.d(TAG,"点击了事件");
-                //播放音乐
+                Log.d(TAG,"点击了列表的歌曲");
+                //播放对应位置的音乐
+                playMusicBean(mCurrentPlayPosition);
             }
         });
+    }
+
+    private void playMusicBean(int position) {
+        mCurrentPlayPosition = position;
+        MusicBean musicBean = mDatas.get(mCurrentPlayPosition);
+        albumIv.setImageBitmap(MusicUtils.getAlbumPicture(LocalMusicActivity.this,musicBean.getPath()));
+        singerTv.setText(musicBean.getSinger());
+        songTv.setText(musicBean.getSongName());
+        stopMusic();
+        //albumIv.setImageURI(musicBean.getAlbumName());
+        intentServer.putExtra("play",1);
+        intentServer.putExtra("songPosition",position);
+        this.startService(intentServer);
+        playIv.setImageResource(R.mipmap.icon_pause);
+        isPlaying = 1;
+    }
+
+    private void playMusic() {
+        if(mCurrentPausePositionInSong == 0){
+            intentServer.putExtra("play",2);
+            this.startService(intentServer);
+        }
+        playIv.setImageResource(R.mipmap.icon_play);
+        isPlaying = 1;
+    }
+
+    private void stopMusic() {
+        mCurrentPausePositionInSong = 0;//进度条拖回
+        playIv.setImageResource(R.mipmap.icon_pause);
+        isPlaying = 0;
+    }
+
+    private void pauseMusic(){
+        if(isPlaying == 1){
+        intentServer.putExtra("play",3);
+        this.startService(intentServer);
+        mCurrentPausePositionInSong = 1;
+        playIv.setImageResource(R.mipmap.icon_pause);
+        }
     }
 
     private void initView () {
@@ -114,18 +142,62 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
         lineTv = findViewById(R.id.local_music_bottom_iv_line);
         listIv.setOnClickListener(this);
         playIv.setOnClickListener(this);
+        //服务的设置
+        intentServer = new Intent(this,Audio.class);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.local_music_bottom_iv_play:
+            case R.id.local_music_bottom_iv_play:{
+                Toast.makeText(this,"点击了底部",Toast.LENGTH_SHORT).show();
+                //if (mCurrentPlayPosition == -1) {
+                //并没有选中要播放的音乐
+                //Log.d(TAG,"没有音乐");
+                //return;
+                //}
+                if (isPlaying == 1) {
+                    Log.d(TAG,"正在播放");
+                    //此时处于播放状态，需要暂停音乐
+                    pauseMusic();
+                } else {
+                    Log.d(TAG,"noneSong");
+                    //此时没有播放音乐，点击开始播放音乐，同时开始旋转
+                    playMusic();
+                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    //   animator.resume();
+                    //}
+                }
+                break;
+            }
             case R.id.local_music_bottom_iv_list:
                 Toast.makeText(this,"没有菜单",Toast.LENGTH_SHORT).show();
-            case R.id.local_music_bottomLayout:
-                Toast.makeText(this,"还没有播放",Toast.LENGTH_SHORT).show();
-            case R.id.local_top_back:
-                finish();
+                break;
+                //case R.id.local_music_bottomLayout:
+                //Toast.makeText(this,"没有具体播放页",Toast.LENGTH_SHORT).show();
+                //break;
+            case R.id.local_top_back:{
+                Log.d(TAG,"点击了返回按钮");
+                this.finish();
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    class MyConnection implements ServiceConnection {//控制连接实现mediaPlay的调用
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            controller= (Audio.Finder) service;//获取控制连接对象
+            int duration = controller.getDuration();//获取音乐总时长
+            //textView2.setText(DataUtils.formatTime(duration));//设置总时长
+            //seekBar.setMax(duration);//设置进度条的最大值
+            //Update();//提醒进度条更新
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
         }
     }
 

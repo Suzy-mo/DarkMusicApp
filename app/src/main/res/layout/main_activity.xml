@@ -141,21 +141,21 @@
                 android:layout_height="60dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:src="@mipmap/music_logo" />
+                android:src="@mipmap/icon_album" />
 
 
             <TextView
                 android:id="@+id/main_music_bottom_tv_song"
-                android:layout_width="wrap_content"
+                android:layout_width="23dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="33dp"
                 android:layout_marginTop="30dp"
                 android:layout_toRightOf="@id/main_music_bottom_iv_album"
+                android:gravity="center"
                 android:maxLines="1"
                 android:text="歌曲"
                 android:textColor="@color/front_song"
-                android:textSize="18dp"
-                android:gravity="center"/>
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/main_music_bottom_tv_singer"
@@ -197,7 +197,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_toLeftOf="@id/main_music_bottom_iv_list"
-                android:src="@mipmap/icon_play" />
+                android:src="@mipmap/icon_pause" />
         </RelativeLayout>
 
         <RelativeLayout

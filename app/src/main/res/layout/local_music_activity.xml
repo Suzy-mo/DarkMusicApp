@@ -54,7 +54,7 @@
             android:layout_height="60dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@mipmap/music_logo" />
+            android:src="@mipmap/icon_album" />
 
 
         <TextView
@@ -105,12 +105,12 @@
 
         <ImageView
             android:id="@+id/local_music_bottom_iv_play"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="5dp"
+            android:layout_width="36dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/local_music_bottom_iv_list"
-            android:src="@mipmap/icon_play" />
+            android:src="@mipmap/icon_pause" />
     </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/local_music_rv"
