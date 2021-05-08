@@ -1,4 +1,4 @@
-package com.qg.darkCloudApp.model;
+package com.qg.darkCloudApp.model.Utils;
 
 /**
  * @Name：NextWorkUtils

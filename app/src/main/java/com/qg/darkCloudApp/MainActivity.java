@@ -1,6 +1,5 @@
 package com.qg.darkCloudApp;
 
-import androidx.annotation.LongDef;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -12,8 +11,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,14 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qg.darkCloudApp.Adapter.ViewPagerAdapter;
-import com.qg.darkCloudApp.bean.MusicBean;
-import com.qg.darkCloudApp.model.Utils.DataUtils;
 import com.qg.darkCloudApp.server.Audio;
 import com.qg.darkCloudApp.ui.LocalMusicActivity;
 import com.qg.darkCloudApp.ui.SearchActivity;
-import com.qg.darkCloudApp.ui.StartActivity;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.qg.darkCloudApp.Adapter.LocalMusicAdapter;
 import com.qg.darkCloudApp.R;
-import com.qg.darkCloudApp.bean.MusicBean;
+import com.qg.darkCloudApp.model.bean.MusicBean;
 import com.qg.darkCloudApp.model.Utils.MusicUtils;
 import com.qg.darkCloudApp.server.Audio;
 

@@ -1,4 +1,4 @@
-package com.qg.darkCloudApp.bean;
+package com.qg.darkCloudApp.model.bean;
 
 /**
  * @Name：localMusicBean

@@ -10,7 +10,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import com.qg.darkCloudApp.R;
-import com.qg.darkCloudApp.bean.MusicBean;
+import com.qg.darkCloudApp.model.bean.MusicBean;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;

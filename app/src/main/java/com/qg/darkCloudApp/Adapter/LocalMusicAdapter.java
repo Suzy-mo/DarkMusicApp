@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.qg.darkCloudApp.R;
-import com.qg.darkCloudApp.bean.MusicBean;
+import com.qg.darkCloudApp.model.bean.MusicBean;
 
 import java.util.List;
 
