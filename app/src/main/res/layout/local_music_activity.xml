@@ -28,7 +28,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="10dp"
         android:layout_alignBottom="@id/local_top_text"
-        android:src="@mipmap/icon_back"/>
+        android:src="@drawable/ic_back"/>
 
 </RelativeLayout>
     <RelativeLayout
@@ -101,7 +101,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
             android:layout_marginRight="5dp"
-            android:src="@mipmap/icon_list" />
+            android:src="@drawable/ic_list" />
 
         <ImageView
             android:id="@+id/local_music_bottom_iv_play"
@@ -110,7 +110,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/local_music_bottom_iv_list"
-            android:src="@mipmap/icon_pause" />
+            android:src="@drawable/ic_puase" />
     </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/local_music_rv"

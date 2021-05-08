@@ -4,14 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
-import com.qg.darkCloudApp.MainActivity;
 import com.qg.darkCloudApp.R;
+import com.qg.darkCloudApp.model.bean.MusicBean;
 import com.qg.darkCloudApp.model.database.MyDataBaseHelper;
+
+import java.util.List;
 
 public class StartActivity extends AppCompatActivity {
     private TextView tvMusic, tvEmpty;
@@ -30,7 +29,14 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    sleep(2000);
+                    sleep(3000);
+                    List<MusicBean> mDatas;
+                    //mDatas = MusicUtils.loadLocalMusicData(StartActivity.this);
+                    //DataBaseManager mDataBaseManager = new DataBaseManager(StartActivity.this);
+                    //for(int i = 0;i < mDatas.size();i++){
+                    //   mDataBaseManager.InsertLocalMusic(mDatas.get(i));
+                    //Log.d("LocalMusicActivity","插入成功+1");
+                    //}
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();

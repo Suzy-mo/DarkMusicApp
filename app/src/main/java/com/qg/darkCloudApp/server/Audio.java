@@ -54,8 +54,8 @@ public class Audio extends Service {
                 player.reset();
                 //设置新的路径
                 try {
-                    player.setDataSource(intent.getStringExtra("songPath"));
-                    Log.d(TAG, intent.getStringExtra("songPath"));
+                    player.setDataSource(intent.getStringExtra("songPosition"));
+                    Log.d(TAG, intent.getStringExtra("songPosition"));
                     playMusic();
                     //animator.start();
                 } catch (IOException e) {

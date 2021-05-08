@@ -16,30 +16,30 @@ import androidx.annotation.Nullable;
 public class MyDataBaseHelper extends SQLiteOpenHelper {
 
     public static final String CREATE_LOCAL_LIST = "create table LocalList("
-        +"id integer primary key autoincrement,"
-        +"singer text,"
-        +"song_id integer,"
-        +"song_name text,"
-        +"album_id integer,"
-        +"album_name text,"
-        +"duration integer,"
-        +"duration_string text,"
-        +"path text)";
+            + "id integer primary key autoincrement,"
+            + "song_id integer,"
+            + "song_name text,"
+            + "singer text,"
+            + "album_id integer,"
+            + "album_name text,"
+            + "duration integer,"
+            + "duration_string text,"
+            + "path text)";
 
-    public static final String CREATE_CURRENT_LIST = "create table LocalList("
-            +"id integer primary key autoincrement,"
-            +"singer text,"
-            +"song_id integer,"
-            +"song_name text,"
-            +"album_id integer,"
-            +"album_name text,"
-            +"duration integer,"
-            +"duration_string text,"
-            +"path text)";
+    public static final String CREATE_CURRENT_LIST = "create table CurrrentList("
+            + "id integer primary key autoincrement,"
+            + "singer text,"
+            + "song_id integer,"
+            + "song_name text,"
+            + "album_id integer,"
+            + "album_name text,"
+            + "duration integer,"
+            + "duration_string text,"
+            + "path text)";
 
-    public static final String CREATE_HISTORY_LIST = "create table LocalList("
-            +"id integer primary key autoincrement,"
-            +"search_name text)";
+    public static final String CREATE_HISTORY_LIST = "create table HistoryList("
+            + "id integer primary key autoincrement,"
+            + "search_name text)";
 
     private Context mContext;
     private static String TAG = "MyDataBase";
@@ -54,7 +54,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_LOCAL_LIST);
         db.execSQL(CREATE_CURRENT_LIST);
         db.execSQL(CREATE_HISTORY_LIST);
-        Log.d(TAG,"创建表成功");
+        Log.d(TAG, "创建表成功");
 
     }
 

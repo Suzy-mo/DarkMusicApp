@@ -1,4 +1,4 @@
-package com.qg.darkCloudApp;
+package com.qg.darkCloudApp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -17,10 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qg.darkCloudApp.Adapter.ViewPagerAdapter;
+import com.qg.darkCloudApp.adapter.ViewPagerAdapter;
+import com.qg.darkCloudApp.R;
 import com.qg.darkCloudApp.server.Audio;
-import com.qg.darkCloudApp.ui.LocalMusicActivity;
-import com.qg.darkCloudApp.ui.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;

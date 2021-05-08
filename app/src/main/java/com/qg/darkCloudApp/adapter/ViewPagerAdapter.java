@@ -1,7 +1,6 @@
-package com.qg.darkCloudApp.Adapter;
+package com.qg.darkCloudApp.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

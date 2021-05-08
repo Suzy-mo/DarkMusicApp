@@ -1,4 +1,4 @@
-package com.qg.darkCloudApp.Adapter;
+package com.qg.darkCloudApp.adapter;
 
 import android.content.Context;
 import android.util.Log;

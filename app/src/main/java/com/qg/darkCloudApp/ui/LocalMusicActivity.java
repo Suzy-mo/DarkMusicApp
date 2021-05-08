@@ -15,10 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qg.darkCloudApp.Adapter.LocalMusicAdapter;
+import com.qg.darkCloudApp.adapter.LocalMusicAdapter;
 import com.qg.darkCloudApp.R;
 import com.qg.darkCloudApp.model.bean.MusicBean;
 import com.qg.darkCloudApp.model.Utils.MusicUtils;
+import com.qg.darkCloudApp.model.database.DataBaseManager;
 import com.qg.darkCloudApp.server.Audio;
 
 import java.util.List;
@@ -31,8 +32,8 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
     RecyclerView musicRv;
     //ObjectAnimator animator;
     List<MusicBean> mDatas;//数据源
-    private int oldPosition = -1;
-    int mCurrentPlayPosition = -1;//记录当前正在播放的音乐的位置
+    private int oldPosition = 0;
+    int mCurrentPlayPosition = 0;//记录当前正在播放的音乐的位置
     int mCurrentPausePositionInSong = 0;//记录暂停音乐时进度条的位置
     int isPlaying = 0;//记录当前是否在播放
     private LocalMusicAdapter adapter;
@@ -41,6 +42,8 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
     Intent intentServer;
     MyConnection myConnection;
     Audio.Finder controller;
+
+    DataBaseManager mDataBaseManager = new DataBaseManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
         //将扫描到的音乐赋值给音乐列表
         Log.d(TAG,"进入了获取函数getMusicList");
         mDatas = MusicUtils.loadLocalMusicData(this);
+        //mDatas = mDataBaseManager.queryLocalList();
         Log.d(TAG,"扫描完成");
         if (mDatas != null && mDatas.size() > 0) {
             Log.d(TAG,"选择显示本地列表");
@@ -86,21 +90,24 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
             public void OnItemClick(View view, int position) {
                 Log.d(TAG,"点击了列表的歌曲");
                 //播放对应位置的音乐
-                playMusicBean(mCurrentPlayPosition);
+                System.out.println(position);
+                playMusicBean(position);
             }
         });
     }
 
     private void playMusicBean(int position) {
-        mCurrentPlayPosition = position;
-        MusicBean musicBean = mDatas.get(mCurrentPlayPosition);
-        albumIv.setImageBitmap(MusicUtils.getAlbumPicture(LocalMusicActivity.this,musicBean.getPath()));
+        Log.d(TAG,"playMusicBean");
+        mCurrentPlayPosition = position + 1;
+        MusicBean musicBean = mDatas.get(position);
+        Log.d(TAG,musicBean.getPath());
+        //albumIv.setImageBitmap(MusicUtils.getAlbumPicture(LocalMusicActivity.this,musicBean.getPath()));
         singerTv.setText(musicBean.getSinger());
         songTv.setText(musicBean.getSongName());
         stopMusic();
         //albumIv.setImageURI(musicBean.getAlbumName());
         intentServer.putExtra("play",1);
-        intentServer.putExtra("songPosition",position);
+        intentServer.putExtra("songPosition",musicBean.getPath());
         this.startService(intentServer);
         playIv.setImageResource(R.mipmap.icon_pause);
         isPlaying = 1;
@@ -142,6 +149,7 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
         lineTv = findViewById(R.id.local_music_bottom_iv_line);
         listIv.setOnClickListener(this);
         playIv.setOnClickListener(this);
+        backTv.setOnClickListener(this);
         //服务的设置
         intentServer = new Intent(this,Audio.class);
     }

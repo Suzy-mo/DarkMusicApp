@@ -37,16 +37,17 @@ public class MusicUtils {
         Log.d(TAG,"进入了扫描函数");
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                String song = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                String songName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
                 String singer = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                String albumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                 String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
                 long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
                 SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
-                String time = sdf.format(new Date(duration));
-                Log.d(TAG,song+singer+album+time);
+                String sDuration = sdf.format(new Date(duration));
+                int songId = 0,albumId = 0;
+                Log.d(TAG,songName+singer+albumName+sDuration);
                 //将一行当中的数据封装到对象当中
-                MusicBean bean = new MusicBean(song, singer, album, time, path);
+                MusicBean bean = new MusicBean(songId,songName,singer,albumId,albumName,duration,sDuration,path);
                 list.add(bean);
                 }
             }
@@ -102,7 +103,6 @@ public class MusicUtils {
         }
         return albumPicture;
     }
-
 }
 
 
