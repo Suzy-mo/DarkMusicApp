@@ -20,7 +20,7 @@ import com.qg.darkCloudApp.R;
 import com.qg.darkCloudApp.model.bean.MusicBean;
 import com.qg.darkCloudApp.model.Utils.MusicUtils;
 import com.qg.darkCloudApp.model.database.DataBaseManager;
-import com.qg.darkCloudApp.server.Audio;
+import com.qg.darkCloudApp.server.MusicService;
 
 import java.util.List;
 
@@ -39,9 +39,10 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
     private LocalMusicAdapter adapter;
     private String TAG = "LocalMusicActivity";
 
-    Intent intentServer;
+    Intent serviceIntent;
     MyConnection myConnection;
-    Audio.Finder controller;
+    MusicService.MusicBinder musicBinder;
+    private MusicService musicService;
 
     DataBaseManager mDataBaseManager = new DataBaseManager(this);
 
@@ -106,17 +107,17 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
         songTv.setText(musicBean.getSongName());
         stopMusic();
         //albumIv.setImageURI(musicBean.getAlbumName());
-        intentServer.putExtra("play",1);
-        intentServer.putExtra("songPosition",musicBean.getPath());
-        this.startService(intentServer);
+        serviceIntent.putExtra("play",1);
+        serviceIntent.putExtra("songPosition",musicBean.getPath());
+        this.startService(serviceIntent);
         playIv.setImageResource(R.mipmap.icon_pause);
         isPlaying = 1;
     }
 
     private void playMusic() {
         if(mCurrentPausePositionInSong == 0){
-            intentServer.putExtra("play",2);
-            this.startService(intentServer);
+            serviceIntent.putExtra("play",2);
+            this.startService(serviceIntent);
         }
         playIv.setImageResource(R.mipmap.icon_play);
         isPlaying = 1;
@@ -130,8 +131,8 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
 
     private void pauseMusic(){
         if(isPlaying == 1){
-        intentServer.putExtra("play",3);
-        this.startService(intentServer);
+        serviceIntent.putExtra("play",3);
+        this.startService(serviceIntent);
         mCurrentPausePositionInSong = 1;
         playIv.setImageResource(R.mipmap.icon_pause);
         }
@@ -151,7 +152,8 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
         playIv.setOnClickListener(this);
         backTv.setOnClickListener(this);
         //服务的设置
-        intentServer = new Intent(this,Audio.class);
+        serviceIntent = new Intent(this, MusicService.class);
+        //bindService(serviceIntent,myConnection,BIND_AUTO_CREATE);
     }
 
     @Override
@@ -194,18 +196,25 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    /**
+     * @author Suzy.Mo
+     * @description  Service Connection
+     */
+
     class MyConnection implements ServiceConnection {//控制连接实现mediaPlay的调用
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            controller= (Audio.Finder) service;//获取控制连接对象
-            int duration = controller.getDuration();//获取音乐总时长
+            musicBinder = (MusicService.MusicBinder) service;//获取控制连接对象
+            musicService = musicBinder.getService();
+            Log.d(TAG,"Service与Activity已连接");
+            int duration = musicBinder.getDuration();//获取音乐总时长
             //textView2.setText(DataUtils.formatTime(duration));//设置总时长
             //seekBar.setMax(duration);//设置进度条的最大值
             //Update();//提醒进度条更新
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            musicBinder = null;
         }
     }
 

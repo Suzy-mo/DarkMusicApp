@@ -15,5 +15,6 @@
     <color name="front_singer">#515050</color>
     <color name="local_top">#F0F4F6</color>
     <color name="Local_button">#FBFAFA</color>
-    <color name="search_bg">#E81010</color>
+    <color name="search_bg">#CFCDCD</color>
+    <color name="line_bg">#B8B0B0</color>
 </resources>

@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.qg.darkCloudApp.adapter.ViewPagerAdapter;
 import com.qg.darkCloudApp.R;
-import com.qg.darkCloudApp.server.Audio;
+import com.qg.darkCloudApp.server.MusicService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Intent intentServer;
 
     MyConnection myConnection;
-    Audio.Finder controller;
+    MusicService.MusicBinder controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playIv.setOnClickListener(this);
         changeIv.setOnClickListener(this);
         //服务的设置
-        intentServer = new Intent(this,Audio.class);
+        intentServer = new Intent(this, MusicService.class);
     }
 
     /**
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     class MyConnection implements ServiceConnection {//控制连接实现mediaPlay的调用
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            controller= (Audio.Finder) service;//获取控制连接对象
+            controller= (MusicService.MusicBinder) service;//获取控制连接对象
             int duration = controller.getDuration();//获取音乐总时长
             //textView2.setText(DataUtils.formatTime(duration));//设置总时长
             //seekBar.setMax(duration);//设置进度条的最大值
