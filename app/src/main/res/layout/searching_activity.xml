@@ -14,14 +14,21 @@
         >
         <ImageView
             android:id="@+id/search_music_back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_back_search"/>
-        <ScrollView
+        <SearchView
             android:id="@+id/search_music_searchView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/search_music_before"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_music_top">
 <!--
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_music_history"
@@ -31,11 +38,11 @@
     <TextView
         android:id="@+id/hot_song_title"
         style="@style/TitleText"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="45dp"
-        android:text="  热搜榜"
-        android:layout_marginTop="8dp"
-        android:layout_below="@+id/search_music_top" />
+        android:layout_marginLeft="40dp"
+        android:text="热搜榜"
+        android:layout_alignParentTop="true" />
     <ImageView
         android:id="@+id/hot_song_line"
         android:layout_width="match_parent"
@@ -52,18 +59,18 @@
         android:layout_below="@+id/hot_song_line"
         android:layout_marginTop="23dp"
         />
-
-<!--    <ScrollView
+</RelativeLayout>
+    <ScrollView
+        android:id="@+id/search_after"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/search_music_top">
-    <androidx.recyclerview.widget.RecyclerView
+    <ListView
         android:id="@+id/search_music_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/search_music_top"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_music_top"
+        android:divider="@color/line_bg"
+        android:dividerHeight="2dp"/>
     </ScrollView>
--->
-
-
 </RelativeLayout>

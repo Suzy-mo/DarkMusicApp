@@ -9,6 +9,7 @@ import com.qg.darkCloudApp.ui.SearchActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -31,7 +32,7 @@ public class NextWorkUtils {
 
     private static String URI_FIRST = "https://netease-cloud-music-api-suzy-mo.vercel.app";
 
-    public String UTFChange(String search) {
+    public static String UTFChange(String search) {
         String s = null;
         if (search != null) {
             try {
@@ -50,16 +51,12 @@ public class NextWorkUtils {
         String parseRespond = sendRequestWithOkHttp(url);
         try {
             JSONObject jsonObject = new JSONObject(parseRespond);
-            JSONObject result = jsonObject.getJSONObject("result");
-            JSONArray hot = result.getJSONArray("hots");
+            JSONArray hot = jsonObject.getJSONObject("result").getJSONArray("hots");
             for (int i = 0; i < hot.length(); i++){
-                JSONObject first = hot.getJSONObject(i);
-                String name = first.getString("first");
+                String name = hot.getJSONObject(i).getString("first");
                 int num = i + 1;
-                String number = String.valueOf(num);
-                Log.d("SearchActivity",number);
-                HotSongBean hotSong = new HotSongBean(number,name);
-                Log.d("SearchSong",number+name);
+                HotSongBean hotSong = new HotSongBean(String.valueOf(num),name);
+                Log.d("SearchSong",String.valueOf(num) + name);
                 HotSong.add(hotSong);
             }
 
@@ -67,6 +64,44 @@ public class NextWorkUtils {
             e.printStackTrace();
         }
         return HotSong;
+    }
+
+    public static List<String>SearchSuggestion(String newText){
+        List<String> suggestList = new ArrayList();
+        String url = URI_FIRST +"/search/suggest?keywords= "+ newText;
+        String parseRespond = sendRequestWithOkHttp(url);
+        try {
+            JSONArray songs = new JSONObject(parseRespond).getJSONObject("result").getJSONArray("songs");
+            for (int i = 0; i <songs.length();i++){
+                String songName = songs.getJSONObject(i).getString("name");
+                String singer = songs.getJSONObject(i).getJSONArray("artists").getJSONObject(0).getString("name");
+                String suggestion = songName + "-" +singer;
+                Log.d("SearchSong",suggestion);
+                suggestList.add(suggestion);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return suggestList;
+    }
+
+    public static List<String>SearchSuggestion1(String newText){
+        List<String> suggestList = new ArrayList();
+        String url = URI_FIRST +"/search/suggest?keywords= "+ newText;
+        String parseRespond = sendRequestWithOkHttp(url);
+        try {
+            JSONArray songs = new JSONObject(parseRespond).getJSONObject("result").getJSONArray("songs");
+            for (int i = 0; i <songs.length();i++){
+                String songName = songs.getJSONObject(i).getString("name");
+                String singer = songs.getJSONObject(i).getJSONArray("ar").getJSONObject(0).getString("name");
+                String suggestion = songName + "-" +singer;
+                Log.d("SearchSong",suggestion);
+                suggestList.add(suggestion);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return suggestList;
     }
 
     private static String sendRequestWithOkHttp(String url) {
