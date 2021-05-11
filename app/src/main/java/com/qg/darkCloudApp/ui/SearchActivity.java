@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -231,6 +232,16 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     public void run() {
                         suggestAdapter = new ArrayAdapter<String>(SearchActivity.this, android.R.layout.simple_list_item_1, suggestDataList);
                         suggestLv.setAdapter(suggestAdapter);
+                        suggestLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                beforeView.setVisibility(View.INVISIBLE);
+                                afterView.setVisibility(View.INVISIBLE);
+                                resultView.setVisibility(View.VISIBLE);
+                                progressBar.setVisibility(View.VISIBLE);
+                                showSearchResult(suggestDataList.get(position));
+                            }
+                        });
                     }
                 });
             }
