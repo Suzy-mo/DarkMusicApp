@@ -27,7 +27,7 @@ import java.util.List;
 public class MusicService extends Service {
     public MediaPlayer player;
     int mCurrentPausePositionInSong = 0;//记录暂停音乐时进度条的位置
-    String TAG = "Audio";
+    String TAG = "MusicServer";
     private static NotificationManager manager;
     private MusicBinder mMusicBinder = new MusicBinder();
     @Nullable
@@ -57,6 +57,7 @@ public class MusicService extends Service {
         public void playClickMusic(List<MusicBean> data, int position){
             MusicBean musicBean = data.get(position);
             String path = musicBean.getPath();
+            Log.d(TAG,"searchMusicPlay path =  "+ path);
             if(player.isPlaying()){
                 player.pause();
                 player.seekTo(0);
@@ -72,6 +73,14 @@ public class MusicService extends Service {
                 player.start();//开始
                 //animator.start();
             } catch (IOException e) {
+                path = "https://music.163.com/song/media/outer/url?id=" + String.valueOf(musicBean.getSongId()) + ".mp3";
+                try {
+                    player.setDataSource(path);
+                    player.prepare();
+                    player.start();//开始
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
                 e.printStackTrace();
             }
         }
@@ -236,6 +245,8 @@ public class MusicService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        player.stop();//停止
+        player.release();//释放内存
     }
 }
 
