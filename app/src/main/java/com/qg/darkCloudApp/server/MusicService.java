@@ -19,19 +19,21 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.qg.darkCloudApp.R;
+import com.qg.darkCloudApp.model.bean.MusicBean;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MusicService extends Service {
     public MediaPlayer player;
     int mCurrentPausePositionInSong = 0;//记录暂停音乐时进度条的位置
     String TAG = "Audio";
     private static NotificationManager manager;
-
+    private MusicBinder mMusicBinder = new MusicBinder();
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {//可以实现在ManActivity调用MediaPlay的方法
-        return new MusicBinder();
+        return mMusicBinder;
     }
 
     public class MusicBinder extends Binder {
@@ -39,6 +41,7 @@ public class MusicService extends Service {
         public MusicService getService(){
             return MusicService.this;
         }
+
         public int getDuration() {//获取总进度条
             return player.getDuration();
         }
@@ -49,6 +52,28 @@ public class MusicService extends Service {
 
         public void setProgress(int s) {//更改当前音乐进度
             player.seekTo(s);
+        }
+
+        public void playClickMusic(List<MusicBean> data, int position){
+            MusicBean musicBean = data.get(position);
+            String path = musicBean.getPath();
+            if(player.isPlaying()){
+                player.pause();
+                player.seekTo(0);
+                player.stop();
+            }
+            //重置多媒体播放器
+            player.reset();
+            //设置新的路径
+            try {
+                player.setDataSource(path);
+                Log.d(TAG, path);
+                player.prepare();
+                player.start();//开始
+                //animator.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

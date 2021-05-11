@@ -17,10 +17,10 @@ import java.util.List;
 
 
 /**
- * @Name：DarkCloudApp
+ * @Name： ViewPagerAdapter
  * @Description：
  * @Author：Suzy.Mo
- * @Date：2021/5/6 21:17
+ * @Date： 2021/5/6 21:17
  */
 public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.ViewHolder> {
     Context mContext;

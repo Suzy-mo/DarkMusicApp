@@ -73,4 +73,23 @@
         android:divider="@color/line_bg"
         android:dividerHeight="2dp"/>
     </ScrollView>
+    <ScrollView
+        android:id="@+id/search_result_list_cv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_music_top"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_result_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+    <ProgressBar
+        android:id="@+id/search_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_music_top"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

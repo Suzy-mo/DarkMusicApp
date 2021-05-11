@@ -21,14 +21,6 @@ public class MusicBean {
     public MusicBean() {
     }
 
-    public MusicBean(String songName, String singer, String albumName, String sDuration,String path) {
-        this.songName = songName;
-        this.singer = singer;
-        this.albumName = albumName;
-        this.sDuration = sDuration;
-        this.path = path;
-    }
-
     public MusicBean(int songId, String songName, String singer, int albumId, String albumName, long duration, String sDuration, String path) {
         this.songId = songId;
         this.songName = songName;

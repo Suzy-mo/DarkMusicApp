@@ -4,6 +4,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.qg.darkCloudApp.model.bean.HotSongBean;
+import com.qg.darkCloudApp.model.bean.MusicBean;
 import com.qg.darkCloudApp.ui.SearchActivity;
 
 import org.json.JSONArray;
@@ -16,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -75,7 +77,7 @@ public class NextWorkUtils {
             for (int i = 0; i <songs.length();i++){
                 String songName = songs.getJSONObject(i).getString("name");
                 String singer = songs.getJSONObject(i).getJSONArray("artists").getJSONObject(0).getString("name");
-                String suggestion = songName + "-" +singer;
+                String suggestion = songName + " " +singer;
                 Log.d("SearchSong",suggestion);
                 suggestList.add(suggestion);
             }
@@ -85,28 +87,42 @@ public class NextWorkUtils {
         return suggestList;
     }
 
-    public static List<String>SearchSuggestion1(String newText){
-        List<String> suggestList = new ArrayList();
-        String url = URI_FIRST +"/search/suggest?keywords= "+ newText;
+    public static List<MusicBean>SearchSongResult(String newText){
+        String url = URI_FIRST +"/cloudsearch?keywords="+ newText;
+        List<MusicBean> songData = new ArrayList<>();
         String parseRespond = sendRequestWithOkHttp(url);
         try {
             JSONArray songs = new JSONObject(parseRespond).getJSONObject("result").getJSONArray("songs");
             for (int i = 0; i <songs.length();i++){
+                //int songId = songs.getJSONObject(i).getInt("id");
+                int songId = i;
+                String songSId = songs.getJSONObject(i).getString("id");
+                String songIdRespond = sendRequestWithOkHttp(URI_FIRST+"/song/url?id="+songId);
+                String path = new JSONObject(songIdRespond).getJSONArray("data").getJSONObject(0).getString("url");
+                //String path = "Path";
                 String songName = songs.getJSONObject(i).getString("name");
                 String singer = songs.getJSONObject(i).getJSONArray("ar").getJSONObject(0).getString("name");
-                String suggestion = songName + "-" +singer;
-                Log.d("SearchSong",suggestion);
-                suggestList.add(suggestion);
+                int duration = i;
+                //int duration = songs.getJSONObject(i).getInt("dt");
+                String sDuration = songs.getJSONObject(i).getString("dt");
+                int albumId = 0;
+                String albumName = songs.getJSONObject(i).getJSONObject("al").getString("name");
+                Log.d("SearchSong",songSId+songName+singer+sDuration+albumName);
+                MusicBean data = new MusicBean(songId,songName,singer,albumId,albumName,duration,sDuration,path);
+                songData.add(data);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return suggestList;
+        return songData;
     }
 
     private static String sendRequestWithOkHttp(String url) {
         String responseData = null;
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient();//.Builder()
+                //.connectTimeout(100, TimeUnit.SECONDS)
+                //.readTimeout(500,TimeUnit.SECONDS)
+                //.build();
         Request request = new Request.Builder()
                 .url(url)
                 .build();

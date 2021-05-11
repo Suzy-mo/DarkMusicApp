@@ -17,4 +17,5 @@
     <color name="Local_button">#FBFAFA</color>
     <color name="search_bg">#CFCDCD</color>
     <color name="line_bg">#B8B0B0</color>
+    <color name="card_view_bg">#DFDBDB</color>
 </resources>
