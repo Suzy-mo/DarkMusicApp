@@ -78,7 +78,7 @@ public class NextWorkUtils {
                 String songName = songs.getJSONObject(i).getString("name");
                 String singer = songs.getJSONObject(i).getJSONArray("artists").getJSONObject(0).getString("name");
                 String suggestion = songName + " " +singer;
-                Log.d("SearchSong",suggestion);
+                Log.d("SearchActivity","SearchSong: "+suggestion);
                 suggestList.add(suggestion);
             }
         } catch (JSONException e) {
@@ -95,19 +95,17 @@ public class NextWorkUtils {
             JSONArray songs = new JSONObject(parseRespond).getJSONObject("result").getJSONArray("songs");
             for (int i = 0; i <songs.length();i++){
                 //int songId = songs.getJSONObject(i).getInt("id");
-                int songId = i;
                 String songSId = songs.getJSONObject(i).getString("id");
+                int songId = Integer.valueOf(songSId);
                 String songIdRespond = sendRequestWithOkHttp(URI_FIRST+"/song/url?id="+songId);
                 String path = new JSONObject(songIdRespond).getJSONArray("data").getJSONObject(0).getString("url");
-                //String path = "Path";
                 String songName = songs.getJSONObject(i).getString("name");
                 String singer = songs.getJSONObject(i).getJSONArray("ar").getJSONObject(0).getString("name");
-                int duration = i;
-                //int duration = songs.getJSONObject(i).getInt("dt");
                 String sDuration = songs.getJSONObject(i).getString("dt");
+                int duration = Integer.valueOf(sDuration);
                 int albumId = 0;
                 String albumName = songs.getJSONObject(i).getJSONObject("al").getString("name");
-                Log.d("SearchSong",songSId+songName+singer+sDuration+albumName);
+                Log.d("SearchActivity","SearchSong"+ songSId + songName + singer + sDuration + albumName);
                 MusicBean data = new MusicBean(songId,songName,singer,albumId,albumName,duration,sDuration,path);
                 songData.add(data);
             }
@@ -130,7 +128,7 @@ public class NextWorkUtils {
         try {
             response = client.newCall(request).execute();
             responseData = response.body().string();
-            Log.d("SearchActivity",responseData);
+            Log.d("SearchActivity","sendRequestWithOkHttp: "+responseData);
         } catch (IOException e) {
             Log.d("SearchActivity","网络错误");
             //Toast.makeText(SearchActivity.this,"请检查网络");

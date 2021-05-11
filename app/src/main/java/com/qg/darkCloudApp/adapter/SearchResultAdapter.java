@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchViewHolder>{
     Context mContext;
-    List<MusicBean> mDatas = new ArrayList<>();
+    List<MusicBean> mDatas ;
     private String TAG = "SearchResultActivity";
 
     OnItemClickListener onItemClickListener;
@@ -58,14 +58,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("SearchActivity","OnClick: position= "+String.valueOf(holder.getAdapterPosition()));
                 int position = holder.getAdapterPosition();
-                onItemClickListener.OnItemClick(v, position);
+                onItemClickListener.OnItemClick(v,position);
             }
         });
-        Log.d(TAG,"监听设置完成");
         return holder;
     }
-
 
     @Override
     public void onBindViewHolder(@NonNull SearchViewHolder holder, final int position) {
@@ -74,8 +73,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         holder.songTv.setText(musicBean.getSongName());
         holder.singerTv.setText(songAndAlbum);
         Log.d(TAG,"视图绑定完成");
-    }
 
+    }
 
     @Override
     public int getItemCount() {

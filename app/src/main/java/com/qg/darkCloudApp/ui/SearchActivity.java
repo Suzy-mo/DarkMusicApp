@@ -38,7 +38,7 @@ import java.util.concurrent.Executors;
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
     List<HotSongBean> HotSong = new ArrayList<>();
     List<String> suggestDataList = new ArrayList<>();
-    List<MusicBean> SearchData = new ArrayList<>();;
+    List<MusicBean> SearchData ;
 
     private RecyclerView hotSongRv, historyRv, searchRv;
     private ListView suggestLv;
@@ -65,8 +65,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         initSearchView();
         executorService = Executors.newFixedThreadPool(3);
         HotSongDoAsync();
-        //设置每一项的点击事件
-        //setResultEventListener();
         //点击搜索按钮时的监听
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             //提交搜索内容时
@@ -97,17 +95,19 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    private void setResultEventListener() {
+    private void setResultEventListener(List<MusicBean> Data) {
         searchResultAdapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(View view, int position) {
+                Log.d("SearchActivity","回到search主函数的OnItemClick");
                 Intent startIntent = new Intent(SearchActivity.this, MusicService.class);
                 startService(startIntent);
+                Log.d(TAG,"启动服务");
                 ServiceConnection connection = new ServiceConnection() {
                     @Override
                     public void onServiceConnected(ComponentName name, IBinder service) {
                         musicBinder = (MusicService.MusicBinder)service;
-                        musicBinder.playClickMusic(SearchData,position);
+                        musicBinder.playClickMusic(Data,position);
                     }
 
                     @Override
@@ -117,6 +117,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 };
                 Intent bindIntent = new Intent(SearchActivity.this, MusicService.class);
                 bindService(bindIntent,connection,BIND_AUTO_CREATE);
+                Log.d(TAG,"绑定服务");
             }
         });
     }
@@ -250,7 +251,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void showSearchResult(String newText){
-
         executorService.submit(new Runnable() {
             @Override
             public void run() {
@@ -267,6 +267,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                         layoutManager= new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
                         searchRv.setLayoutManager(layoutManager);
                         suggestAdapter.notifyDataSetChanged();
+                        //设置每一项的点击事件
+                        setResultEventListener(SearchData);
                     }
                 });
             }
