@@ -73,7 +73,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         holder.songTv.setText(musicBean.getSongName());
         holder.singerTv.setText(songAndAlbum);
         Log.d(TAG,"视图绑定完成");
-
     }
 
     @Override

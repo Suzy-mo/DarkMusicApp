@@ -25,16 +25,57 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/search_music_before"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/search_music_top">
-<!--
-    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_music_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/search_music_top"/>-->
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/search_music_top">
+
+        <TextView
+            android:id="@+id/search_history_title"
+            style="@style/TitleText"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="40dp"
+            android:text="搜索历史"
+            android:layout_alignParentTop="true" />
+
+        <ImageView
+            android:id="@+id/search_history_line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:background="@color/line_bg"
+            android:layout_below="@+id/search_history_title"/>
+        <ImageView
+            android:id="@+id/search_history_delete_iv"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginRight="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/search_history_line"
+            android:src="@drawable/ic_delete"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_history_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_history_line"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/search_music_before"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_music_history"
+        android:layout_marginTop="20dp">
+
+
     <TextView
         android:id="@+id/hot_song_title"
         style="@style/TitleText"

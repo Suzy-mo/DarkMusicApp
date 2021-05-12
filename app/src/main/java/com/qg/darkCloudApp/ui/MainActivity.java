@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //初始化轮播图的组件
         viewPager2 = findViewById(R.id.viewpager2);
         indicatorContainer = findViewById(R.id.container_indicator);
-        listIv.setOnClickListener(this);
+        //listIv.setOnClickListener(this);
         playIv.setOnClickListener(this);
         changeIv.setOnClickListener(this);
         //服务的设置

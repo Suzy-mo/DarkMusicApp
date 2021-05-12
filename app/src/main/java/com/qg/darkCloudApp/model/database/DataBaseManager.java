@@ -1,5 +1,6 @@
 package com.qg.darkCloudApp.model.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
@@ -9,6 +10,7 @@ import android.util.Log;
 import com.qg.darkCloudApp.model.bean.MusicBean;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,6 +22,7 @@ import java.util.List;
 public class DataBaseManager {
 
     private  MyDataBaseHelper dataBaseHelper;
+    private String TAG = "DataBaseHelper";
 
     public DataBaseManager(Context mContext){
         dataBaseHelper = new MyDataBaseHelper(mContext,"db.music",null,1);
@@ -36,7 +39,6 @@ public class DataBaseManager {
         SQLiteDatabase sdb = dataBaseHelper.getReadableDatabase();
         List<MusicBean> list = new ArrayList<MusicBean>();
         Cursor cursor = sdb.rawQuery("select song_id,song_name,singer,album_id,album_name,duration,duration_string,path from LocalList ORDER BY id DESC", null);
-        //int songId, String songName, String singer, int albumId, String albumName, long duration, String sDuration, String path
         while(cursor.moveToFirst()){
                 int songId = cursor.getInt(cursor.getColumnIndex("song_id"));
                 String songName = cursor.getString(cursor.getColumnIndex("song_name"));
@@ -52,5 +54,32 @@ public class DataBaseManager {
         }
         cursor.close();
         return list;
+    }
+
+    public void InsertHistorySearch(String newText){
+        SQLiteDatabase sdb = dataBaseHelper.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("search_name",newText);
+        sdb.insert("HistoryList",null,values);
+        Log.d(TAG,"InsertHistorySearch: insert "+ values);
+    }
+
+    public List<String> queryHistoryList(){
+        SQLiteDatabase sdb = dataBaseHelper.getReadableDatabase();
+        List<String> list = new ArrayList<String>();
+        //Cursor cursor = sdb.rawQuery("select search_name from HistoryList ORDER BY id DESC", null);
+        Cursor cursor = sdb.query("HistoryList",null,null,null,null,null,null);
+        while (cursor.moveToFirst()){
+            String searchName = cursor.getString(cursor.getColumnIndex("search_name"));
+            list.add(searchName);
+        }
+        cursor.close();
+        return list;
+    }
+
+    public void deleteHistory(){
+        SQLiteDatabase sdb = dataBaseHelper.getReadableDatabase();
+        sdb.delete("HistoryList",null,null);
+        Log.d(TAG,"删除成功");
     }
 }

@@ -131,7 +131,7 @@ public class NextWorkUtils {
             Log.d("SearchActivity","sendRequestWithOkHttp: "+responseData);
         } catch (IOException e) {
             Log.d("SearchActivity","网络错误");
-            //Toast.makeText(SearchActivity.this,"请检查网络");
+            //Toast.makeText("请检查网络",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
         return responseData;

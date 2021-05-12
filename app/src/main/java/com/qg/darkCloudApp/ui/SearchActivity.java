@@ -24,11 +24,14 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.qg.darkCloudApp.R;
+import com.qg.darkCloudApp.adapter.HistoryAdapter;
 import com.qg.darkCloudApp.adapter.HotSongAdapter;
 import com.qg.darkCloudApp.adapter.SearchResultAdapter;
 import com.qg.darkCloudApp.model.Utils.NextWorkUtils;
 import com.qg.darkCloudApp.model.bean.HotSongBean;
 import com.qg.darkCloudApp.model.bean.MusicBean;
+import com.qg.darkCloudApp.model.database.DataBaseManager;
+import com.qg.darkCloudApp.model.database.MyDataBaseHelper;
 import com.qg.darkCloudApp.server.MusicService;
 
 import java.util.ArrayList;
@@ -40,21 +43,25 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     List<HotSongBean> HotSong = new ArrayList<>();
     List<String> suggestDataList = new ArrayList<>();
     List<MusicBean> SearchData ;
+    List<String> historyData = new ArrayList<>();
 
     private RecyclerView hotSongRv, historyRv, searchRv;
     private ListView suggestLv;
     private TextView numberTV, nameTV, suggestTv;
-    private ImageView backIv, addIv;
+    private ImageView backIv, addIv,deleteIv;
     private SearchView searchView;
-    private View beforeView, afterView,resultView;
+    private View beforeView, afterView,resultView,historyView;
     private ProgressBar progressBar;
 
     private ExecutorService executorService;
     private MusicService.MusicBinder musicBinder;
+    private MyDataBaseHelper dbHelper;
+    private DataBaseManager dbManager;
 
     HotSongAdapter hotSongAdapter;
     ArrayAdapter<String> suggestAdapter;
     SearchResultAdapter searchResultAdapter;
+    HistoryAdapter historyAdapter;
     private final String TAG = "SearchActivity";
 
     @Override
@@ -62,10 +69,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.searching_activity);
         initView();
-        initHotSongRv();
+        initBeforeView();
         initSearchView();
-        executorService = Executors.newFixedThreadPool(3);
-        HotSongDoAsync();
+        setHistoryView();
+        executorService = Executors.newFixedThreadPool(1);
+        dbHelper = new MyDataBaseHelper(this,"Music.db",null,1);
+        dbHelper.getWritableDatabase();
+        HotSongAsync();
         //点击搜索按钮时的监听
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             //提交搜索内容时
@@ -75,6 +85,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 afterView.setVisibility(View.INVISIBLE);
                 resultView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
+                historyView.setVisibility(View.INVISIBLE);
                 showSearchResult(query);
                 return false;
             }
@@ -84,6 +95,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 beforeView.setVisibility(View.INVISIBLE);
                 afterView.setVisibility(View.VISIBLE);
                 resultView.setVisibility(View.INVISIBLE);
+                historyView.setVisibility(View.INVISIBLE);
                 if (TextUtils.isEmpty(newText)) {
                     suggestLv.clearTextFilter();
                 } else {
@@ -123,22 +135,36 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
+    private void setHistoryEventListener(List<String > data){
+        historyAdapter.setOnHistoryItemClickListener(new HistoryAdapter.OnHistoryClickListener() {
+            @Override
+            public void OnItemClick(View view, int position) {
+                beforeView.setVisibility(View.INVISIBLE);
+                afterView.setVisibility(View.INVISIBLE);
+                resultView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                showSearchResult(data.get(position));
+            }
+        });
+    }
+
     /**
      * @description 开启线程获取热搜榜
      * @author Suzy.Mo
      * @time
      */
-    private void HotSongDoAsync() {
+    private void HotSongAsync() {
         executorService.submit(new Runnable() {
             @Override
             public void run() {
-                // 执行你的耗时操作代码
+                // 执行耗时操作代码
                 Log.d(TAG, "进入耗时网络请求");
                 HotSong = new ArrayList<HotSongBean>();
                 HotSong = NextWorkUtils.SearchHotSong();
-                HotSongDoOnUi(HotSong);
+                HotSongUi(HotSong);
             }
         });
+
     }
 
     /**
@@ -148,12 +174,16 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
      * @author Suzy.Mo
      * @time
      */
-    private void HotSongDoOnUi(List<HotSongBean> data) {
+    private void HotSongUi(List<HotSongBean> data) {
         Handler uiThread = new Handler(Looper.getMainLooper());
         uiThread.post(new Runnable() {
             @Override
             public void run() {
+                Log.d(TAG,"进入展示页面");
                 setHotSongAdapter(data);
+                historyAdapter = new HistoryAdapter(historyData,SearchActivity.this);
+                historyRv.setAdapter(historyAdapter);
+                historyAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -174,6 +204,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private void initView() {
         hotSongRv = findViewById(R.id.search_music_hot_rv);
         searchView = findViewById(R.id.search_music_searchView);
+        historyRv = findViewById(R.id.search_history_rv);
         suggestLv = findViewById(R.id.search_music_result);
         suggestTv = findViewById(R.id.search_suggestion);
         nameTV = findViewById(R.id.hot_song_name);
@@ -183,13 +214,17 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         afterView = findViewById(R.id.search_after);
         searchRv = findViewById(R.id.search_result_list_rv);
         resultView = findViewById(R.id.search_result_list_cv);
+        historyView= findViewById(R.id.search_music_history);
         progressBar = findViewById(R.id.search_progress_bar);
         beforeView.setVisibility(View.VISIBLE);
+        historyView.setVisibility(View.VISIBLE);
         afterView.setVisibility(View.INVISIBLE);
         resultView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
         addIv = findViewById(R.id.result_item_add);
+        deleteIv = findViewById(R.id.search_history_delete_iv);
         backIv.setOnClickListener(this);
+        deleteIv.setOnClickListener(this);
         searchResultAdapter = new SearchResultAdapter(SearchActivity.this,SearchData);
         Log.d(TAG, "初始化成功");
     }
@@ -198,16 +233,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
      * @description 未获取到网络资源前的初始化
      * @author Suzy.Mo
      */
-    private void initHotSongRv() {
+    private void initBeforeView() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         hotSongRv.setLayoutManager(gridLayoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        historyRv.setLayoutManager(layoutManager);
         HotSong = addData();
         setHotSongAdapter(HotSong);
-    }
-
-    private void initHistoryRv() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        historyRv.setLayoutManager(layoutManager);
     }
 
     private void initSearchView() {
@@ -261,18 +293,47 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         hotSongAdapter.notifyDataSetChanged();
     }
 
+    private void setHistoryView(){
+        executorService = Executors.newFixedThreadPool(1);
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                dbManager = new DataBaseManager(SearchActivity.this);
+                Log.d(TAG,"查询数据库");
+                historyData = new ArrayList<>();
+                historyData =  dbManager.queryHistoryList();
+                Log.d(TAG,"查询成功");
+                for (int i = 0;i<historyData.size();i++){
+                    Log.d(TAG, "queryHistoryList: 历史记录有 "+historyData.get(i));
+                }
+                Handler uiThread = new Handler(Looper.getMainLooper());
+                uiThread.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG,"进入展示页面");
+                        historyAdapter = new HistoryAdapter(historyData,SearchActivity.this);
+                        historyRv.setAdapter(historyAdapter);
+                        historyAdapter.notifyDataSetChanged();
+                        setHistoryEventListener(historyData);
+                    }
+                });
+            }
+        });
+    }
+
     private void showSearchResult(String newText){
         executorService.submit(new Runnable() {
             @Override
             public void run() {
                 SearchData = new ArrayList<>();
                 SearchData = NextWorkUtils.SearchSongResult(newText);
+                dbManager = new DataBaseManager(SearchActivity.this);
+                dbManager.InsertHistorySearch(newText);
                 Handler uiThread = new Handler(Looper.getMainLooper());
                 uiThread.post(new Runnable() {
                     @Override
                     public void run() {
                         searchResultAdapter = new SearchResultAdapter(SearchActivity.this,SearchData);
-                        progressBar.setVisibility(View.GONE);
                         searchRv.setAdapter(searchResultAdapter);
                         LinearLayoutManager layoutManager;
                         layoutManager= new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
@@ -280,6 +341,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                         suggestAdapter.notifyDataSetChanged();
                         //设置每一项的点击事件
                         setResultEventListener(SearchData);
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
             }
@@ -320,6 +382,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         if (v == backIv) {
             this.finish();
+        }else if(v == deleteIv){
+            Log.d(TAG,"点击了删除按钮");
+            dbManager = new DataBaseManager(this);
+            dbManager.deleteHistory();
+            setHistoryView();
         }
     }
 }
