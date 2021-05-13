@@ -165,21 +165,23 @@
                 android:layout_height="180dp">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="2dp">
+                    android:layout_width="378dp"
+                    android:layout_height="147dp"
+                    android:layout_centerInParent="true"
+                    app:cardCornerRadius="35dp"
+                    app:cardElevation="15dp">
 
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/viewpager2"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"/>
 
                     <ImageView
                         android:id="@+id/main_music_banner_icon"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@mipmap/music_logo" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"/>
 
                 </androidx.cardview.widget.CardView>
 
@@ -201,7 +203,7 @@
                 android:layout_height="700dp"
                 android:layout_below="@+id/main_banner_layout"
                 android:layout_marginTop="-12dp"
-                android:background="@mipmap/ic_launcher_round" />
+                 />
         </RelativeLayout>
 
 

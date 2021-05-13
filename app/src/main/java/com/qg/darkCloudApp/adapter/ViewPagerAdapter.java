@@ -1,6 +1,7 @@
 package com.qg.darkCloudApp.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +25,9 @@ import java.util.List;
  */
 public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.ViewHolder> {
     Context mContext;
-    List<ImageView> imageLists = new ArrayList<>();
+    List<Bitmap> imageLists = new ArrayList<>();
 
-    public ViewPagerAdapter(List<ImageView> imageLists){
+    public ViewPagerAdapter(List<Bitmap> imageLists){
         this.imageLists =imageLists;
     }
 
@@ -39,7 +40,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int realPosition = position % 8;
-        //ImageView imageView = imageLists.get(realPosition);
+        holder.pictureIv.setImageBitmap(imageLists.get(realPosition));
     }
 
     @Override

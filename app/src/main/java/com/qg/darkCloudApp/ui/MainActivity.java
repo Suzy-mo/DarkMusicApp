@@ -7,6 +7,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -14,7 +17,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,12 +36,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ViewPager2 viewPager2;
     private int lastPosition;                           //记录轮播图最后所在的位置
-    private List<ImageView> imageViews = new ArrayList<>();   //轮播图的颜色
+    private List<Bitmap> bannerPictures = new ArrayList<>();   //轮播图的颜色
     private LinearLayout indicatorContainer;            //填充指示点的容器
     private Handler mHandler = new Handler();
-    private final int BannerNum = 8;
+    private final int BannerNum = 10;
 
-    private String GAT = "MainActivity";
+    private String TAG = "MainActivity";
     Intent intent;
     Intent intentServer;
 
@@ -52,14 +54,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.main_activity);
         verifyStoragePermissions(this);
         initView();
+        initPicture();
         //初始化指示点
         initIndicatorDots();
-        Log.d(GAT,"初始化完成");
+        Log.d(TAG,"初始化完成");
         //轮播图的实现
-        bannerSet(imageViews);
+        bannerSet(bannerPictures);
+        loadPicture();
+        bannerSet(bannerPictures);
     }
 
-    private void bannerSet(List<ImageView> imageViews) {
+    private List<Bitmap> loadPicture() {
+        return bannerPictures;
+    }
+
+    private void initPicture() {
+        Resources res = MainActivity.this.getResources();
+        bannerPictures.add(BitmapFactory.decodeResource(res,R.mipmap.banner1));
+        bannerPictures.add(BitmapFactory.decodeResource(res,R.mipmap.banner2));
+        bannerPictures.add(BitmapFactory.decodeResource(res,R.mipmap.banner3));
+        bannerPictures.add(BitmapFactory.decodeResource(res,R.mipmap.banner4));
+        bannerPictures.add(BitmapFactory.decodeResource(res,R.mipmap.banner5));
+        bannerPictures.add(BitmapFactory.decodeResource(res,R.mipmap.banner6));
+        bannerPictures.add(BitmapFactory.decodeResource(res,R.mipmap.banner7));
+        bannerPictures.add(BitmapFactory.decodeResource(res,R.mipmap.banner8));
+        bannerPictures.add(BitmapFactory.decodeResource(res,R.mipmap.banner9));
+        bannerPictures.add(BitmapFactory.decodeResource(res,R.mipmap.banner10));
+    }
+
+    private void bannerSet(List<Bitmap> imageViews) {
         //添加适配器
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(imageViews);
         viewPager2.setAdapter(viewPagerAdapter);
@@ -75,8 +98,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 //轮播时，改变指示点
-                int current = position % 4;
-                int last = lastPosition % 4;
+                int current = position % BannerNum;
+                int last = lastPosition % BannerNum;
                 indicatorContainer.getChildAt(current).setBackgroundResource(R.drawable.shape_dot_selected);
                 indicatorContainer.getChildAt(last).setBackgroundResource(R.drawable.shape_dot);
                 lastPosition = position;
@@ -96,11 +119,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //初始化轮播图的组件
         viewPager2 = findViewById(R.id.viewpager2);
         indicatorContainer = findViewById(R.id.container_indicator);
-        //listIv.setOnClickListener(this);
+        listIv.setOnClickListener(this);
         playIv.setOnClickListener(this);
         changeIv.setOnClickListener(this);
         //服务的设置
         intentServer = new Intent(this, MusicService.class);
+        Log.d(TAG,"界面初始化完成");
     }
 
     /**
@@ -147,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Log.d(GAT,"进入了监听");
+        Log.d(TAG,"进入了监听");
         switch(v.getId()){
             case R.id.main_bottom_my_music:{
                 intent = new Intent(MainActivity.this,LocalMusicActivity.class);
