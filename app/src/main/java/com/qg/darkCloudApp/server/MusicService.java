@@ -10,7 +10,9 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.qg.darkCloudApp.R;
 import com.qg.darkCloudApp.model.bean.MusicBean;
+import com.qg.darkCloudApp.ui.SearchActivity;
 
 import java.io.IOException;
 import java.util.List;
@@ -103,7 +106,22 @@ public class MusicService extends Service {
                 player.prepare();
                 player.start();//开始
             } catch (IOException ioException) {
-                Toast.makeText(getBaseContext(),"因为版权原因，无法播放该首歌曲",Toast.LENGTH_SHORT).show();
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                //Toast.makeText(getBaseContext(), "UI action in UI Thread", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getBaseContext(),"因为版权原因，无法播放该首歌曲",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }).start();
+
                 ioException.printStackTrace();
             }
             e.printStackTrace();

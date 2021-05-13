@@ -70,14 +70,22 @@
 
         </ImageView>
 
-        <ImageView
-            android:id="@+id/main_music_bottom_iv_album"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/main_music_bottom_rv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@mipmap/icon_album" />
-
+            android:layout_marginLeft="30dp"
+            app:cardCornerRadius="25dp">
+            <ImageView
+                android:id="@+id/main_music_bottom_iv_album"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="-5dp"
+                android:layout_marginTop="-5dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icon_album" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/main_music_bottom_tv_song"
@@ -85,8 +93,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="33dp"
             android:layout_marginTop="30dp"
-            android:layout_toRightOf="@id/main_music_bottom_iv_album"
+            android:layout_toRightOf="@+id/main_music_bottom_rv"
             android:gravity="center"
+            android:maxWidth="100dp"
             android:maxLines="1"
             android:text="歌曲"
             android:textColor="@color/front_song"
@@ -100,7 +109,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="-2dp"
             android:layout_toRightOf="@+id/main_music_bottom_tv_song"
-            android:maxWidth="100dp"
+            android:maxWidth="80dp"
             android:text="歌手"
             android:textColor="@color/front_singer"
             android:textSize="13dp" />
@@ -191,6 +200,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="700dp"
                 android:layout_below="@+id/main_banner_layout"
+                android:layout_marginTop="-12dp"
                 android:background="@mipmap/ic_launcher_round" />
         </RelativeLayout>
 

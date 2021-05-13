@@ -1,5 +1,6 @@
 package com.qg.darkCloudApp.model.Utils;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -105,8 +106,10 @@ public class NextWorkUtils {
                 int duration = Integer.valueOf(sDuration);
                 int albumId = 0;
                 String albumName = songs.getJSONObject(i).getJSONObject("al").getString("name");
+                String albumPath = songs.getJSONObject(i).getJSONObject("al").getString("picUrl");
+                //Bitmap albumBitmap = MusicUtils.getAlbumPicture(albumPath);
                 Log.d("SearchActivity","SearchSong"+ songSId + songName + singer + sDuration + albumName);
-                MusicBean data = new MusicBean(songId,songName,singer,albumId,albumName,duration,sDuration,path);
+                MusicBean data = new MusicBean(songId,songName,singer,albumId,albumPath,albumName,duration,sDuration,path);
                 songData.add(data);
             }
         } catch (JSONException e) {

@@ -27,6 +27,7 @@ import com.qg.darkCloudApp.R;
 import com.qg.darkCloudApp.adapter.HistoryAdapter;
 import com.qg.darkCloudApp.adapter.HotSongAdapter;
 import com.qg.darkCloudApp.adapter.SearchResultAdapter;
+import com.qg.darkCloudApp.model.Utils.MusicUtils;
 import com.qg.darkCloudApp.model.Utils.NextWorkUtils;
 import com.qg.darkCloudApp.model.bean.HotSongBean;
 import com.qg.darkCloudApp.model.bean.MusicBean;
@@ -139,6 +140,27 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 singerTv.setText(Data.get(position).getSinger());
                 songTv.setText(Data.get(position).getSongName());
                 playIv.setImageResource(R.drawable.ic_puase);
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 执行耗时操作代码
+                        Log.d(TAG,"进入耗时加载图片");
+                        //for (int i = 0;i<SearchData.size();i++){
+                            //String path = SearchData.get(i).getAlbumPath();
+                            //SearchData.get(i).setAlbumBitmap(MusicUtils.getAlbumPicture(path));
+                        //}
+                        String path = SearchData.get(position).getAlbumPath();
+                        SearchData.get(position).setAlbumBitmap(MusicUtils.getAlbumPicture(path));
+                        Handler uiThread = new Handler(Looper.getMainLooper());
+                        uiThread.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                albumIv.setImageBitmap(Data.get(position).getAlbumBitmap());
+                                Log.d(TAG,"专辑设置完毕");
+                            }
+                        });
+                    }
+                });
             }
         });
     }

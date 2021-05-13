@@ -150,14 +150,24 @@
 
         </ImageView>
 
-        <ImageView
-            android:id="@+id/search_music_bottom_iv_album"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@mipmap/icon_album" />
 
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/search_music_button_rv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            app:cardCornerRadius="25dp">
+            <ImageView
+                android:id="@+id/search_music_bottom_iv_album"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="-5dp"
+                android:layout_marginTop="-5dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icon_album" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/search_music_bottom_tv_song"
@@ -165,7 +175,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="33dp"
             android:layout_marginTop="30dp"
-            android:layout_toRightOf="@id/search_music_bottom_iv_album"
+            android:layout_toRightOf="@+id/search_music_button_rv"
             android:gravity="center"
             android:maxLines="1"
             android:text="歌曲"
