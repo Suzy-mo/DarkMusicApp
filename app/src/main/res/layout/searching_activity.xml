@@ -119,6 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/search_music_top"
+        android:layout_above="@+id/main_music_bottomLayout"
         >
 
         <androidx.recyclerview.widget.RecyclerView
@@ -133,4 +134,88 @@
         android:layout_below="@+id/search_music_top"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"/>
+    <RelativeLayout
+        android:id="@+id/main_music_bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp">
+
+        <ImageView
+            android:id="@+id/line_layout"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="#D6D4D4">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/search_music_bottom_iv_album"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/icon_album" />
+
+
+        <TextView
+            android:id="@+id/search_music_bottom_tv_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="33dp"
+            android:layout_marginTop="30dp"
+            android:layout_toRightOf="@id/search_music_bottom_iv_album"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="歌曲"
+            android:textColor="@color/front_song"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/search_music_bottom_tv_singer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/search_music_bottom_tv_song"
+            android:layout_marginLeft="20dp"
+            android:maxWidth="100dp"
+            android:layout_toRightOf="@+id/search_music_bottom_tv_song"
+            android:text="歌手"
+            android:textColor="@color/front_singer"
+            android:textSize="13dp"
+            android:maxLines="1"/>
+
+        <ImageView
+            android:id="@+id/search_music_bottom_iv_line"
+            android:layout_width="8dp"
+            android:layout_height="2dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="-24dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toRightOf="@id/search_music_bottom_tv_song"
+            android:background="#838282" />
+
+        <ImageView
+            android:id="@+id/search_music_bottom_iv_list"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/ic_list" />
+
+        <ImageView
+            android:id="@+id/search_music_bottom_iv_play"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/search_music_bottom_iv_list"
+            android:src="@drawable/ic_puase" />
+    </RelativeLayout>
+
+
 </RelativeLayout>

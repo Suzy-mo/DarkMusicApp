@@ -47,8 +47,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     private RecyclerView hotSongRv, historyRv, searchRv;
     private ListView suggestLv;
-    private TextView numberTV, nameTV, suggestTv;
-    private ImageView backIv, addIv,deleteIv;
+    private TextView singerTv,songTv;
+    private ImageView backIv, addIv,deleteIv,albumIv,playIv,listIv;
     private SearchView searchView;
     private View beforeView, afterView,resultView,historyView;
     private ProgressBar progressBar;
@@ -63,6 +63,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     SearchResultAdapter searchResultAdapter;
     HistoryAdapter historyAdapter;
     private final String TAG = "SearchActivity";
+    private int isPlaying = 0 ;
+    private int currentPosition;
+    private MusicBean playingBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +118,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 Log.d("SearchActivity","回到search主函数的OnItemClick");
                 Intent startIntent = new Intent(SearchActivity.this, MusicService.class);
                 startService(startIntent);
+                playingBean = Data.get(position);
                 Log.d(TAG,"启动服务");
+                isPlaying = 1;
                 ServiceConnection connection = new ServiceConnection() {
                     @Override
                     public void onServiceConnected(ComponentName name, IBinder service) {
@@ -131,6 +136,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 Intent bindIntent = new Intent(SearchActivity.this, MusicService.class);
                 bindService(bindIntent,connection,BIND_AUTO_CREATE);
                 Log.d(TAG,"绑定服务");
+                singerTv.setText(Data.get(position).getSinger());
+                songTv.setText(Data.get(position).getSongName());
+                playIv.setImageResource(R.drawable.ic_puase);
             }
         });
     }
@@ -206,9 +214,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         searchView = findViewById(R.id.search_music_searchView);
         historyRv = findViewById(R.id.search_history_rv);
         suggestLv = findViewById(R.id.search_music_result);
-        suggestTv = findViewById(R.id.search_suggestion);
-        nameTV = findViewById(R.id.hot_song_name);
-        numberTV = findViewById(R.id.hot_song_number);
         backIv = findViewById(R.id.search_music_back);
         beforeView = findViewById(R.id.search_music_before);
         afterView = findViewById(R.id.search_after);
@@ -216,6 +221,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         resultView = findViewById(R.id.search_result_list_cv);
         historyView= findViewById(R.id.search_music_history);
         progressBar = findViewById(R.id.search_progress_bar);
+        songTv = findViewById(R.id.search_music_bottom_tv_song);
+        singerTv = findViewById(R.id.search_music_bottom_tv_singer);
+        albumIv = findViewById(R.id.search_music_bottom_iv_album);
+        playIv = findViewById(R.id.search_music_bottom_iv_play);
+        listIv = findViewById(R.id.search_music_bottom_iv_list);
         beforeView.setVisibility(View.VISIBLE);
         historyView.setVisibility(View.VISIBLE);
         afterView.setVisibility(View.INVISIBLE);
@@ -225,6 +235,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         deleteIv = findViewById(R.id.search_history_delete_iv);
         backIv.setOnClickListener(this);
         deleteIv.setOnClickListener(this);
+        playIv.setOnClickListener(this);
+        listIv.setOnClickListener(this);
         searchResultAdapter = new SearchResultAdapter(SearchActivity.this,SearchData);
         Log.d(TAG, "初始化成功");
     }
@@ -380,13 +392,59 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if (v == backIv) {
-            this.finish();
-        }else if(v == deleteIv){
-            Log.d(TAG,"点击了删除按钮");
-            dbManager = new DataBaseManager(this);
-            dbManager.deleteHistory();
-            setHistoryView();
+        if(v==playIv){
+            ServiceConnection connection;
+            if(isPlaying == 1){
+                isPlaying = 0;
+                playIv.setImageResource(R.drawable.ic_play);
+                connection = new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+                        musicBinder = (MusicService.MusicBinder) service;
+                        currentPosition = musicBinder.pauseMusic();
+                        Log.d(TAG,String.valueOf(currentPosition));
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+
+                    }
+                };
+            }
+            else {
+                isPlaying = 1;
+                playIv.setImageResource(R.drawable.ic_puase);
+                connection = new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+                        musicBinder = (MusicService.MusicBinder) service;
+                        Log.d(TAG,String.valueOf(currentPosition));
+                        musicBinder.rePlayMusic(playingBean, currentPosition);
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+
+                    }
+                };
+            }
+            Intent bindIntent = new Intent(SearchActivity.this, MusicService.class);
+            bindService(bindIntent,connection,BIND_AUTO_CREATE);
+        }
+
+        switch (v.getId()) {
+            case R.id.search_music_back: {
+                this.finish();
+                break;
+            }
+            case R.id.search_history_delete_iv: {
+                Log.d(TAG, "点击了删除按钮");
+                dbManager = new DataBaseManager(this);
+                dbManager.deleteHistory();
+                setHistoryView();
+                break;
+            }
+
         }
     }
 }

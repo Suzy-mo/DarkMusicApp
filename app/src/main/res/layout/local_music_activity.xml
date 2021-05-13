@@ -75,6 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:maxWidth="100dp"
             android:layout_toRightOf="@+id/local_music_bottom_tv_song"
             android:layout_alignBottom="@+id/local_music_bottom_tv_song"
             android:text="歌手"
@@ -96,17 +97,17 @@
 
         <ImageView
             android:id="@+id/local_music_bottom_iv_list"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="5dp"
             android:src="@drawable/ic_list" />
 
         <ImageView
             android:id="@+id/local_music_bottom_iv_play"
-            android:layout_width="36dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/local_music_bottom_iv_list"

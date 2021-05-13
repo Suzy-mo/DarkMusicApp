@@ -34,10 +34,11 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
     List<MusicBean> mDatas;//数据源
     private int oldPosition = 0;
     int mCurrentPlayPosition = 0;//记录当前正在播放的音乐的位置
-    int mCurrentPausePositionInSong = 0;//记录暂停音乐时进度条的位置
+    int currentPosition = 0;//记录暂停音乐时进度条的位置
     int isPlaying = 0;//记录当前是否在播放
     private LocalMusicAdapter adapter;
     private String TAG = "LocalMusicActivity";
+    MusicBean playingBean;
 
     Intent serviceIntent;
     MyConnection myConnection;
@@ -100,43 +101,26 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
     private void playMusicBean(int position) {
         Log.d(TAG,"playMusicBean");
         mCurrentPlayPosition = position + 1;
-        MusicBean musicBean = mDatas.get(position);
-        Log.d(TAG,musicBean.getPath());
+        playingBean = mDatas.get(position);
+        Log.d(TAG,playingBean.getPath());
         //albumIv.setImageBitmap(MusicUtils.getAlbumPicture(LocalMusicActivity.this,musicBean.getPath()));
-        singerTv.setText(musicBean.getSinger());
-        songTv.setText(musicBean.getSongName());
+        singerTv.setText(playingBean.getSinger());
+        songTv.setText(playingBean.getSongName());
         stopMusic();
         //albumIv.setImageURI(musicBean.getAlbumName());
         serviceIntent.putExtra("play",1);
-        serviceIntent.putExtra("songPosition",musicBean.getPath());
+        serviceIntent.putExtra("songPosition",playingBean.getPath());
         this.startService(serviceIntent);
-        playIv.setImageResource(R.mipmap.icon_pause);
-        isPlaying = 1;
-    }
-
-    private void playMusic() {
-        if(mCurrentPausePositionInSong == 0){
-            serviceIntent.putExtra("play",2);
-            this.startService(serviceIntent);
-        }
-        playIv.setImageResource(R.mipmap.icon_play);
+        playIv.setImageResource(R.drawable.ic_puase);
         isPlaying = 1;
     }
 
     private void stopMusic() {
-        mCurrentPausePositionInSong = 0;//进度条拖回
-        playIv.setImageResource(R.mipmap.icon_pause);
+        currentPosition = 0;//进度条拖回
+        playIv.setImageResource(R.drawable.ic_play);
         isPlaying = 0;
     }
 
-    private void pauseMusic(){
-        if(isPlaying == 1){
-        serviceIntent.putExtra("play",3);
-        this.startService(serviceIntent);
-        mCurrentPausePositionInSong = 1;
-        playIv.setImageResource(R.mipmap.icon_pause);
-        }
-    }
 
     private void initView () {
         playIv = findViewById(R.id.local_music_bottom_iv_play);
@@ -160,24 +144,43 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.local_music_bottom_iv_play:{
-                Toast.makeText(this,"点击了底部",Toast.LENGTH_SHORT).show();
-                //if (mCurrentPlayPosition == -1) {
-                //并没有选中要播放的音乐
-                //Log.d(TAG,"没有音乐");
-                //return;
-                //}
-                if (isPlaying == 1) {
-                    Log.d(TAG,"正在播放");
-                    //此时处于播放状态，需要暂停音乐
-                    pauseMusic();
-                } else {
-                    Log.d(TAG,"noneSong");
-                    //此时没有播放音乐，点击开始播放音乐，同时开始旋转
-                    playMusic();
-                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    //   animator.resume();
-                    //}
+                ServiceConnection connection;
+                if(isPlaying == 1){
+                    isPlaying = 0;
+                    playIv.setImageResource(R.drawable.ic_play);
+                    connection = new ServiceConnection() {
+                        @Override
+                        public void onServiceConnected(ComponentName name, IBinder service) {
+                            musicBinder = (MusicService.MusicBinder) service;
+                            currentPosition = musicBinder.pauseMusic();
+                            Log.d(TAG,String.valueOf(currentPosition));
+                        }
+
+                        @Override
+                        public void onServiceDisconnected(ComponentName name) {
+
+                        }
+                    };
                 }
+                else {
+                    isPlaying = 1;
+                    playIv.setImageResource(R.drawable.ic_puase);
+                    connection = new ServiceConnection() {
+                        @Override
+                        public void onServiceConnected(ComponentName name, IBinder service) {
+                            musicBinder = (MusicService.MusicBinder) service;
+                            Log.d(TAG,String.valueOf(currentPosition));
+                            musicBinder.rePlayMusic(playingBean, currentPosition);
+                        }
+
+                        @Override
+                        public void onServiceDisconnected(ComponentName name) {
+
+                        }
+                    };
+                }
+                Intent bindIntent = new Intent(this, MusicService.class);
+                bindService(bindIntent,connection,BIND_AUTO_CREATE);
                 break;
             }
             case R.id.local_music_bottom_iv_list:

@@ -1,6 +1,7 @@
 package com.qg.darkCloudApp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.ComponentName;
@@ -29,7 +30,7 @@ import static com.qg.darkCloudApp.model.Utils.PermissionUtils.verifyStoragePermi
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     TextView singerTv,songTv;
     ImageView bannerCenterIv,albumIv,playIv,listIv,changeIv;
-    RelativeLayout searchLayout;
+    CardView searchCv;
 
     private ViewPager2 viewPager2;
     private int lastPosition;                           //记录轮播图最后所在的位置
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playIv =findViewById(R.id.main_music_bottom_iv_play);
         listIv =findViewById(R.id.main_music_bottom_iv_list);
         changeIv = findViewById(R.id.main_bottom_my_music);
+        searchCv = findViewById(R.id.main_search_layout);
         //初始化轮播图的组件
         viewPager2 = findViewById(R.id.viewpager2);
         indicatorContainer = findViewById(R.id.container_indicator);

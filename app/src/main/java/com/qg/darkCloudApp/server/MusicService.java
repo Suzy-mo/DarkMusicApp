@@ -30,6 +30,8 @@ public class MusicService extends Service {
     String TAG = "MusicServer";
     private static NotificationManager manager;
     private MusicBinder mMusicBinder = new MusicBinder();
+
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {//可以实现在ManActivity调用MediaPlay的方法
@@ -59,39 +61,54 @@ public class MusicService extends Service {
                 @Override
                 public void run() {
                     MusicBean musicBean = data.get(position);
-                    String path = musicBean.getPath();
-                    Log.d(TAG,"searchMusicPlay path =  "+ path);
-                    if(player.isPlaying()){
-                        player.pause();
-                        player.seekTo(0);
-                        player.stop();
-                    }
-                    //重置多媒体播放器
-                    player.reset();
-                    //设置新的路径
-                    try {
-                        player.setDataSource(path);
-                        Log.d(TAG, path);
-                        player.prepare();
-                        player.start();//开始
-                        //animator.start();
-                    } catch (IOException e) {
-                        path = "https://music.163.com/song/media/outer/url?id=" + String.valueOf(musicBean.getSongId()) + ".mp3";
-                        try {
-                            player.setDataSource(path);
-                            player.prepare();
-                            player.start();//开始
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                        e.printStackTrace();
-                    }
+                    setMusicPlayer(musicBean);
+                    Log.d(TAG,"searchMusicPlay path =  "+ musicBean.getPath());
                 }
             }).start();
+        }
 
+        public int pauseMusic(){
+            mCurrentPausePositionInSong = player.getCurrentPosition();
+            player.pause();
+            return mCurrentPausePositionInSong;
+        }
+
+        public void rePlayMusic(MusicBean playBean,int currentPosition){
+            setMusicPlayer(playBean);
+            player.seekTo(currentPosition);
         }
     }
 
+
+    private void setMusicPlayer(MusicBean musicBean){
+        String path = musicBean.getPath();
+        if(player.isPlaying()){
+            player.pause();
+            player.seekTo(0);
+            player.stop();
+        }
+        //重置多媒体播放器
+        player.reset();
+        //设置新的路径
+        try {
+            player.setDataSource(path);
+            Log.d(TAG, path);
+            player.prepare();
+            player.start();//开始
+            //animator.start();
+        } catch (IOException e) {
+            path = "https://music.163.com/song/media/outer/url?id=" + String.valueOf(musicBean.getSongId()) + ".mp3";
+            try {
+                player.setDataSource(path);
+                player.prepare();
+                player.start();//开始
+            } catch (IOException ioException) {
+                Toast.makeText(getBaseContext(),"因为版权原因，无法播放该首歌曲",Toast.LENGTH_SHORT).show();
+                ioException.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
 
     public void onCreate() {//创建后台服务
         super.onCreate();
@@ -187,8 +204,6 @@ public class MusicService extends Service {
                 .build();
         //发送通知
         manager.notify(1, notification);
-
-
     }
 
     /**

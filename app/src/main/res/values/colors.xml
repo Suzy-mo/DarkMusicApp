@@ -10,12 +10,13 @@
     <color name="cloud_black">#201D1D</color>
     <color name="colorPrimary">#191515</color>
     <color name="colorPrimaryDark">#5D656C</color>
-    <color name="background">#EAEBEC</color>
-    <color name="front_song">#121111</color>
-    <color name="front_singer">#515050</color>
+    <color name="background">@color/white</color>
+    <color name="front_song">@color/black</color>
+    <color name="front_singer">#191818</color>
     <color name="local_top">#F0F4F6</color>
     <color name="Local_button">#FBFAFA</color>
-    <color name="search_bg">#CFCDCD</color>
-    <color name="line_bg">#B8B0B0</color>
+    <color name="search_bg">#33F8F5F5</color>
+    <color name="line_bg">#201F1F</color>
     <color name="card_view_bg">#DFDBDB</color>
+    <color name="base_color">#121111</color>
 </resources>
