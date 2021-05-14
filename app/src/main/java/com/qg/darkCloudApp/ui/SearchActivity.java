@@ -143,13 +143,14 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 executorService.submit(new Runnable() {
                     @Override
                     public void run() {
+                        // 执行耗时操作代码
                         Log.d(TAG,"进入耗时加载图片");
+                        //for (int i = 0;i<SearchData.size();i++){
+                            //String path = SearchData.get(i).getAlbumPath();
+                            //SearchData.get(i).setAlbumBitmap(MusicUtils.getAlbumPicture(path));
+                        //}
                         String path = SearchData.get(position).getAlbumPath();
                         SearchData.get(position).setAlbumBitmap(MusicUtils.getAlbumPicture(path));
-                        for (int i = 0;i<SearchData.size();i++){
-                            String path1 = SearchData.get(i).getAlbumPath();
-                            SearchData.get(i).setAlbumBitmap(MusicUtils.getAlbumPicture(path1));
-                        }
                         Handler uiThread = new Handler(Looper.getMainLooper());
                         uiThread.post(new Runnable() {
                             @Override

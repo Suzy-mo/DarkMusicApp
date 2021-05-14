@@ -30,14 +30,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    sleep(3000);
-                    List<MusicBean> mDatas;
-                    //mDatas = MusicUtils.loadLocalMusicData(StartActivity.this);
-                    //DataBaseManager mDataBaseManager = new DataBaseManager(StartActivity.this);
-                    //for(int i = 0;i < mDatas.size();i++){
-                    //   mDataBaseManager.InsertLocalMusic(mDatas.get(i));
-                    //Log.d("LocalMusicActivity","插入成功+1");
-                    //}
+                    sleep(1000);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();

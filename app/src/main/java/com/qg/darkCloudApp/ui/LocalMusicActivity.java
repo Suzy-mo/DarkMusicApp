@@ -41,7 +41,6 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
     MusicBean playingBean;
 
     Intent serviceIntent;
-    MyConnection myConnection;
     MusicService.MusicBinder musicBinder;
     private MusicService musicService;
 
@@ -199,27 +198,7 @@ public class LocalMusicActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    /**
-     * @author Suzy.Mo
-     * @description  Service Connection
-     */
 
-    class MyConnection implements ServiceConnection {//控制连接实现mediaPlay的调用
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            musicBinder = (MusicService.MusicBinder) service;//获取控制连接对象
-            musicService = musicBinder.getService();
-            Log.d(TAG,"Service与Activity已连接");
-            int duration = musicBinder.getDuration();//获取音乐总时长
-            //textView2.setText(DataUtils.formatTime(duration));//设置总时长
-            //seekBar.setMax(duration);//设置进度条的最大值
-            //Update();//提醒进度条更新
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            musicBinder = null;
-        }
-    }
 
     @Override
     protected void onDestroy() {

@@ -140,8 +140,7 @@ public class MusicService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                switch (intent.getIntExtra("play", -1)) {
-                    case 1: {
+                if (intent.getIntExtra("play", -1) == 1) {
                         //点击列表播放音乐
                         stopMusic();
                         //重置多媒体播放器
@@ -159,24 +158,11 @@ public class MusicService extends Service {
                         //设置自动播放的监听
                         player.setOnCompletionListener(new InnerOnCompletionListener());
                         Log.d(TAG, "启动后台服务，点击列表后播放音乐...");//提示
-                        break;
-                    }
-                    case 2: {
-                        playMusic();
-                        Log.d(TAG, "重新播放音乐");
-                        break;
-                    }
-                    case 3: {
-                        pauseMusic();
-                        Log.d(TAG, "重新播放音乐");
-                        break;
-                    }
                 }
                 //stopSelf();
                 //Log.d(TAG,"服务停止");
             }
         }).start();
-
         return START_STICKY;
     }
 
@@ -271,21 +257,8 @@ public class MusicService extends Service {
         }
     }
 
-    private void pauseMusic() {
-        if (player != null && player.isPlaying()) {
-            mCurrentPausePositionInSong = player.getCurrentPosition();
-            player.pause();
-            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //    animator.pause();
-            //}
-        }
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 }
-
-//player.stop();//停止
-// player.release();//释放内存

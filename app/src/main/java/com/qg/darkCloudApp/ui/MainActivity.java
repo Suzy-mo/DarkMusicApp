@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Intent intent;
     Intent intentServer;
 
-    MyConnection myConnection;
     MusicService.MusicBinder controller;
 
     @Override
@@ -179,11 +178,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.main_music_bottom_iv_play:{
-                //intentServer.putExtra("play",1);
-                //MainActivity.this.startService(intentServer);
-                //intentServer.putExtra("path", )
-                //myConnection = new MyConnection();//建立新的对象
-                //bindService(intentServer,myConnection,BIND_AUTO_CREATE);
                 Toast.makeText(this,"播放音乐",Toast.LENGTH_SHORT).show();
                 break;
             }
@@ -197,20 +191,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    class MyConnection implements ServiceConnection {//控制连接实现mediaPlay的调用
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            controller= (MusicService.MusicBinder) service;//获取控制连接对象
-            int duration = controller.getDuration();//获取音乐总时长
-            //textView2.setText(DataUtils.formatTime(duration));//设置总时长
-            //seekBar.setMax(duration);//设置进度条的最大值
-            //Update();//提醒进度条更新
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    }
 
     public void SearchLayout(View view) {
         intent = new Intent(MainActivity.this, SearchActivity.class);
