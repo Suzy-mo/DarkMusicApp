@@ -33,7 +33,7 @@ import okhttp3.Response;
  */
 public class NextWorkUtils {
 
-    private static String URI_FIRST = "https://netease-cloud-music-api-suzy-mo.vercel.app";
+    private static String URI_FIRST = "http://neteasemusic.heyanle.com:3000";
 
     public static String UTFChange(String search) {
         String s = null;
@@ -89,7 +89,7 @@ public class NextWorkUtils {
     }
 
     public static List<MusicBean>SearchSongResult(String newText){
-        String url = URI_FIRST +"/cloudsearch?keywords="+ newText;
+        String url = URI_FIRST +"/cloudsearch?keywords= "+ newText;
         List<MusicBean> songData = new ArrayList<>();
         String parseRespond = sendRequestWithOkHttp(url);
         try {

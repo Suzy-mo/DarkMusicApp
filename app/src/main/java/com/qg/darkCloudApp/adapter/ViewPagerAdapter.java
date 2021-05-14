@@ -39,7 +39,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        int realPosition = position % 8;
+        int realPosition = position % 10;
         holder.pictureIv.setImageBitmap(imageLists.get(realPosition));
     }
 

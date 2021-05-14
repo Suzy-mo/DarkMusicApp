@@ -47,8 +47,9 @@ public class MusicUtils {
                 String albumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                 String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
                 long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
-                String sDuration = sdf.format(new Date(duration));
+                //SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
+                //String sDuration = sdf.format(new Date(duration));
+                String sDuration = DataUtils.formatTime(duration);
                 int songId = 0,albumId = 0;
                 Log.d(TAG,songName+singer+albumName+sDuration);
                 //将一行当中的数据封装到对象当中
@@ -85,6 +86,8 @@ public class MusicUtils {
         }
         return bm;
     }
+
+
 }
 
 
