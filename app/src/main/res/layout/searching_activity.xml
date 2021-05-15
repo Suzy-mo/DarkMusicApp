@@ -33,7 +33,7 @@
 
         <TextView
             android:id="@+id/search_history_title"
-            style="@style/TitleText"
+            style="@style/Title"
             android:layout_width="200dp"
             android:layout_height="45dp"
             android:layout_marginLeft="40dp"
@@ -78,7 +78,7 @@
 
     <TextView
         android:id="@+id/hot_song_title"
-        style="@style/TitleText"
+        style="@style/Title"
         android:layout_width="200dp"
         android:layout_height="45dp"
         android:layout_marginLeft="40dp"
@@ -101,25 +101,24 @@
         android:layout_marginTop="23dp"
         />
 </RelativeLayout>
-    <ScrollView
+    <LinearLayout
         android:id="@+id/search_after"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/search_music_top">
     <ListView
         android:id="@+id/search_music_result"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/search_music_top"
+        android:layout_height="match_parent"
         android:divider="@color/line_bg"
         android:dividerHeight="2dp"/>
-    </ScrollView>
+    </LinearLayout>
     <ScrollView
         android:id="@+id/search_result_list_cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/search_music_top"
-        android:layout_above="@+id/main_music_bottomLayout"
+        android:layout_above="@+id/search_music_bottom_layout"
         >
 
         <androidx.recyclerview.widget.RecyclerView
@@ -135,9 +134,9 @@
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"/>
     <RelativeLayout
-        android:id="@+id/main_music_bottomLayout"
+        android:id="@+id/search_music_bottom_layout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp">
 
@@ -154,15 +153,15 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/search_music_button_rv"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="30dp"
-            app:cardCornerRadius="25dp">
+            android:layout_marginLeft="5dp"
+            app:cardCornerRadius="20dp">
             <ImageView
                 android:id="@+id/search_music_bottom_iv_album"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginLeft="-5dp"
                 android:layout_marginTop="-5dp"
                 android:layout_centerVertical="true"
@@ -173,7 +172,7 @@
             android:id="@+id/search_music_bottom_tv_song"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="33dp"
+            android:layout_marginLeft="18dp"
             android:layout_marginTop="30dp"
             android:layout_toRightOf="@+id/search_music_button_rv"
             android:gravity="center"
@@ -213,7 +212,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="15dp"
+            android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:src="@drawable/ic_list" />
 
@@ -221,7 +220,7 @@
             android:id="@+id/search_music_bottom_iv_play"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/search_music_bottom_iv_list"
             android:src="@drawable/ic_puase" />

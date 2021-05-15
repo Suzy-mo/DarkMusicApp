@@ -51,7 +51,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private TextView singerTv,songTv;
     private ImageView backIv, addIv,deleteIv,albumIv,playIv,listIv;
     private SearchView searchView;
-    private View beforeView, afterView,resultView,historyView;
+    private View beforeView, afterView,resultView,historyView,buttonView;
     private ProgressBar progressBar;
 
     private ExecutorService executorService;
@@ -73,12 +73,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.searching_activity);
         initView();
+        dbHelper = new MyDataBaseHelper(this,"Music.db",null,1);
+        dbHelper.getWritableDatabase();
         initBeforeView();
         initSearchView();
         setHistoryView();
         executorService = Executors.newFixedThreadPool(1);
-        dbHelper = new MyDataBaseHelper(this,"Music.db",null,1);
-        dbHelper.getWritableDatabase();
         HotSongAsync();
         //点击搜索按钮时的监听
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -90,6 +90,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 resultView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 historyView.setVisibility(View.INVISIBLE);
+                buttonView.setVisibility(View.INVISIBLE);
+                setHistoryView();
                 showSearchResult(query);
                 return false;
             }
@@ -100,12 +102,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 afterView.setVisibility(View.VISIBLE);
                 resultView.setVisibility(View.INVISIBLE);
                 historyView.setVisibility(View.INVISIBLE);
-                if (TextUtils.isEmpty(newText)) {
-                    suggestLv.clearTextFilter();
-                } else {
-                    SuggestAsync(newText);
-                    //suggestLv.setFilterText(newText);
-                }
+                buttonView.setVisibility(View.INVISIBLE);
+                SuggestAsync(newText);
                 return false;
             }
         });
@@ -248,6 +246,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         albumIv = findViewById(R.id.search_music_bottom_iv_album);
         playIv = findViewById(R.id.search_music_bottom_iv_play);
         listIv = findViewById(R.id.search_music_bottom_iv_list);
+        buttonView = findViewById(R.id.search_music_bottom_layout);
         beforeView.setVisibility(View.VISIBLE);
         historyView.setVisibility(View.VISIBLE);
         afterView.setVisibility(View.INVISIBLE);
@@ -292,12 +291,17 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void run() {
                 suggestDataList = NextWorkUtils.SearchSuggestion(newText);
+                for(int i = 0; i < suggestDataList.size(); i++){
+                    Log.d(TAG,"SuggestAsync: suggestDataList "+i+" = "+suggestDataList.get(i));
+                }
+                suggestAdapter = new ArrayAdapter<>(SearchActivity.this, android.R.layout.simple_list_item_activated_1, suggestDataList);
                 Handler uiThread = new Handler(Looper.getMainLooper());
                 uiThread.post(new Runnable() {
                     @Override
                     public void run() {
-                        suggestAdapter = new ArrayAdapter<String>(SearchActivity.this, android.R.layout.simple_list_item_1, suggestDataList);
+                        Log.d(TAG,"回到主线程");
                         suggestLv.setAdapter(suggestAdapter);
+                        suggestAdapter.notifyDataSetChanged();
                         suggestLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -328,6 +332,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setHistoryView(){
+        Log.d(TAG,"进入setHistoryView");
         executorService = Executors.newFixedThreadPool(1);
         executorService.submit(new Runnable() {
             @Override
@@ -335,6 +340,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 dbManager = new DataBaseManager(SearchActivity.this);
                 Log.d(TAG,"查询数据库");
                 historyData = new ArrayList<>();
+                dbManager.deleteHistory();
                 historyData =  dbManager.queryHistoryList();
                 Log.d(TAG,"查询成功");
                 for (int i = 0;i<historyData.size();i++){
@@ -367,6 +373,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 uiThread.post(new Runnable() {
                     @Override
                     public void run() {
+                        buttonView.setVisibility(View.VISIBLE);
                         searchResultAdapter = new SearchResultAdapter(SearchActivity.this,SearchData);
                         searchRv.setAdapter(searchResultAdapter);
                         LinearLayoutManager layoutManager;

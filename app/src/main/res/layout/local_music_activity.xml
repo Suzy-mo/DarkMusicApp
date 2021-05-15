@@ -34,7 +34,7 @@
     <RelativeLayout
         android:id="@+id/local_music_bottomLayout"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
         android:background="@color/Local_button">
@@ -50,15 +50,15 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/local_music_bottom_button_rv"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="5dp"
             app:cardCornerRadius="25dp">
             <ImageView
                 android:id="@+id/local_music_bottom_iv_icon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginLeft="-5dp"
                 android:layout_marginTop="-5dp"
                 android:layout_centerVertical="true"
@@ -70,7 +70,7 @@
             android:id="@+id/local_music_bottom_tv_song"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="30dp"
             android:layout_toRightOf="@+id/local_music_bottom_button_rv"
             android:maxLines="1"
@@ -106,18 +106,18 @@
 
         <ImageView
             android:id="@+id/local_music_bottom_iv_list"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="15dp"
+            android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:src="@drawable/ic_list" />
 
         <ImageView
             android:id="@+id/local_music_bottom_iv_play"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/local_music_bottom_iv_list"
             android:src="@drawable/ic_puase" />

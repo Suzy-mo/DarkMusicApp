@@ -74,6 +74,9 @@ public class DataBaseManager {
             list.add(searchName);
         }
         cursor.close();
+        for(int i = 0; i<list.size();i++){
+            Log.d(TAG,"查询的数据有");
+        }
         return list;
     }
 

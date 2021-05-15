@@ -7,7 +7,7 @@
     app:contentPadding="5dp"
     app:cardCornerRadius="11sp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="#33171720"
+    app:cardBackgroundColor="#331D1D25"
     >
 <TextView
     android:id="@+id/search_history_item_tv"
