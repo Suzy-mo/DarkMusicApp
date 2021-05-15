@@ -61,21 +61,27 @@ public class DataBaseManager {
         ContentValues values = new ContentValues();
         values.put("search_name",newText);
         sdb.insert("HistoryList",null,values);
+        //String sql = "insert into HistoryList(search_name) values(?)";
+        //Object object[] = {newText};
+        //sdb.execSQL(sql,object);
         Log.d(TAG,"InsertHistorySearch: insert "+ values);
     }
 
     public List<String> queryHistoryList(){
         SQLiteDatabase sdb = dataBaseHelper.getReadableDatabase();
         List<String> list = new ArrayList<String>();
-        //Cursor cursor = sdb.rawQuery("select search_name from HistoryList ORDER BY id DESC", null);
-        Cursor cursor = sdb.query("HistoryList",null,null,null,null,null,null);
-        while (cursor.moveToFirst()){
-            String searchName = cursor.getString(cursor.getColumnIndex("search_name"));
-            list.add(searchName);
+        Cursor cursor = sdb.rawQuery("select search_name from HistoryList ORDER BY id DESC", null);
+        //Cursor cursor = sdb.query("HistoryList",null,null,null,null,null,null);
+        if (cursor.moveToFirst()){
+            do{
+                String searchName = cursor.getString(cursor.getColumnIndex("search_name"));
+                list.add(searchName);
+            }while (cursor.moveToNext());
+
         }
         cursor.close();
         for(int i = 0; i<list.size();i++){
-            Log.d(TAG,"查询的数据有");
+            Log.d(TAG,"查询的数据有"+list.get(i));
         }
         return list;
     }

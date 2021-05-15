@@ -132,7 +132,6 @@ public class MusicService extends Service {
         super.onCreate();
         player = new MediaPlayer();//创建媒体播放对象
         showNotification();
-        Toast.makeText(this, "创建后台服务...", Toast.LENGTH_SHORT).show();//提示框
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {//启动后台服务

@@ -109,22 +109,26 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-
+    /**
+     * @param Data
+     * @description 设置搜索结果展示的列表
+     * @author Suzy.Mo
+     */
     private void setResultEventListener(List<MusicBean> Data) {
         searchResultAdapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(View view, int position) {
-                Log.d("SearchActivity","回到search主函数的OnItemClick");
+                Log.d("SearchActivity", "回到search主函数的OnItemClick");
                 Intent startIntent = new Intent(SearchActivity.this, MusicService.class);
                 startService(startIntent);
                 playingBean = Data.get(position);
-                Log.d(TAG,"启动服务");
+                Log.d(TAG, "启动服务");
                 isPlaying = 1;
                 ServiceConnection connection = new ServiceConnection() {
                     @Override
                     public void onServiceConnected(ComponentName name, IBinder service) {
-                        musicBinder = (MusicService.MusicBinder)service;
-                        musicBinder.playClickMusic(Data,position);
+                        musicBinder = (MusicService.MusicBinder) service;
+                        musicBinder.playClickMusic(Data, position);
                     }
 
                     @Override
@@ -133,8 +137,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 };
                 Intent bindIntent = new Intent(SearchActivity.this, MusicService.class);
-                bindService(bindIntent,connection,BIND_AUTO_CREATE);
-                Log.d(TAG,"绑定服务");
+                bindService(bindIntent, connection, BIND_AUTO_CREATE);
+                Log.d(TAG, "绑定服务");
                 singerTv.setText(Data.get(position).getSinger());
                 songTv.setText(Data.get(position).getSongName());
                 playIv.setImageResource(R.drawable.ic_puase);
@@ -142,11 +146,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void run() {
                         // 执行耗时操作代码
-                        Log.d(TAG,"进入耗时加载图片");
-                        //for (int i = 0;i<SearchData.size();i++){
-                            //String path = SearchData.get(i).getAlbumPath();
-                            //SearchData.get(i).setAlbumBitmap(MusicUtils.getAlbumPicture(path));
-                        //}
+                        Log.d(TAG, "进入耗时加载图片");
                         String path = SearchData.get(position).getAlbumPath();
                         SearchData.get(position).setAlbumBitmap(MusicUtils.getAlbumPicture(path));
                         Handler uiThread = new Handler(Looper.getMainLooper());
@@ -154,7 +154,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                             @Override
                             public void run() {
                                 albumIv.setImageBitmap(Data.get(position).getAlbumBitmap());
-                                Log.d(TAG,"专辑设置完毕");
+                                Log.d(TAG, "专辑设置完毕");
                             }
                         });
                     }
@@ -163,7 +163,15 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void setHistoryEventListener(List<String > data){
+    /**
+     * @param data
+     * @return
+     * @description  设置历史记录每一项的监听事件
+     * @author Suzy.Mo
+     * @time
+     */
+
+    private void setHistoryEventListener(List<String> data) {
         historyAdapter.setOnHistoryItemClickListener(new HistoryAdapter.OnHistoryClickListener() {
             @Override
             public void OnItemClick(View view, int position) {
@@ -207,9 +215,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         uiThread.post(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG,"进入展示页面");
+                Log.d(TAG, "进入展示页面");
                 setHotSongAdapter(data);
-                historyAdapter = new HistoryAdapter(historyData,SearchActivity.this);
+                historyAdapter = new HistoryAdapter(historyData, SearchActivity.this);
                 historyRv.setAdapter(historyAdapter);
                 historyAdapter.notifyDataSetChanged();
             }
@@ -239,7 +247,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         afterView = findViewById(R.id.search_after);
         searchRv = findViewById(R.id.search_result_list_rv);
         resultView = findViewById(R.id.search_result_list_cv);
-        historyView= findViewById(R.id.search_music_history);
+        historyView = findViewById(R.id.search_music_history);
         progressBar = findViewById(R.id.search_progress_bar);
         songTv = findViewById(R.id.search_music_bottom_tv_song);
         singerTv = findViewById(R.id.search_music_bottom_tv_singer);
@@ -258,7 +266,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         deleteIv.setOnClickListener(this);
         playIv.setOnClickListener(this);
         listIv.setOnClickListener(this);
-        searchResultAdapter = new SearchResultAdapter(SearchActivity.this,SearchData);
+        searchResultAdapter = new SearchResultAdapter(SearchActivity.this, SearchData);
         Log.d(TAG, "初始化成功");
     }
 
@@ -275,6 +283,14 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         setHotSongAdapter(HotSong);
     }
 
+    /**
+     * @param
+     * @return
+     * @description  初始化搜索框的视图
+     * @author Suzy.Mo
+     * @time
+     */
+
     private void initSearchView() {
         //设置ListView启动过滤
         suggestLv.setTextFilterEnabled(true);
@@ -286,20 +302,28 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         searchView.setQueryHint("输入关键字");
     }
 
+    /**
+     * @param newText
+     * @return
+     * @description  根据输入的内容进行搜索建议的查询
+     * @author Suzy.Mo
+     * @time
+     */
+
     private void SuggestAsync(String newText) {
         executorService.submit(new Runnable() {
             @Override
             public void run() {
                 suggestDataList = NextWorkUtils.SearchSuggestion(newText);
-                for(int i = 0; i < suggestDataList.size(); i++){
-                    Log.d(TAG,"SuggestAsync: suggestDataList "+i+" = "+suggestDataList.get(i));
+                for (int i = 0; i < suggestDataList.size(); i++) {
+                    Log.d(TAG, "SuggestAsync: suggestDataList " + i + " = " + suggestDataList.get(i));
                 }
                 suggestAdapter = new ArrayAdapter<>(SearchActivity.this, android.R.layout.simple_list_item_activated_1, suggestDataList);
                 Handler uiThread = new Handler(Looper.getMainLooper());
                 uiThread.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d(TAG,"回到主线程");
+                        Log.d(TAG, "回到主线程");
                         suggestLv.setAdapter(suggestAdapter);
                         suggestAdapter.notifyDataSetChanged();
                         suggestLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -331,27 +355,34 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         hotSongAdapter.notifyDataSetChanged();
     }
 
-    private void setHistoryView(){
-        Log.d(TAG,"进入setHistoryView");
+    /**
+     * @param
+     * @return
+     * @description  设置历史记录的视图，查询数据库后得到数据源，设置适配器
+     * @author Suzy.Mo
+     * @time
+     */
+
+    private void setHistoryView() {
+        Log.d(TAG, "进入setHistoryView");
         executorService = Executors.newFixedThreadPool(1);
         executorService.submit(new Runnable() {
             @Override
             public void run() {
                 dbManager = new DataBaseManager(SearchActivity.this);
-                Log.d(TAG,"查询数据库");
+                Log.d(TAG, "查询数据库");
                 historyData = new ArrayList<>();
-                dbManager.deleteHistory();
-                historyData =  dbManager.queryHistoryList();
-                Log.d(TAG,"查询成功");
-                for (int i = 0;i<historyData.size();i++){
-                    Log.d(TAG, "queryHistoryList: 历史记录有 "+historyData.get(i));
+                historyData = dbManager.queryHistoryList();
+                Log.d(TAG, "查询成功");
+                for (int i = 0; i < historyData.size(); i++) {
+                    Log.d(TAG, "queryHistoryList: 历史记录有 " + historyData.get(i));
                 }
                 Handler uiThread = new Handler(Looper.getMainLooper());
                 uiThread.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d(TAG,"进入展示页面");
-                        historyAdapter = new HistoryAdapter(historyData,SearchActivity.this);
+                        Log.d(TAG, "进入展示页面");
+                        historyAdapter = new HistoryAdapter(historyData, SearchActivity.this);
                         historyRv.setAdapter(historyAdapter);
                         historyAdapter.notifyDataSetChanged();
                         setHistoryEventListener(historyData);
@@ -361,7 +392,15 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void showSearchResult(String newText){
+    /**
+     * @param newText
+     * @return
+     * @description  根据有关键词进行网络搜索
+     * @author Suzy.Mo
+     * @time
+     */
+
+    private void showSearchResult(String newText) {
         executorService.submit(new Runnable() {
             @Override
             public void run() {
@@ -374,10 +413,10 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void run() {
                         buttonView.setVisibility(View.VISIBLE);
-                        searchResultAdapter = new SearchResultAdapter(SearchActivity.this,SearchData);
+                        searchResultAdapter = new SearchResultAdapter(SearchActivity.this, SearchData);
                         searchRv.setAdapter(searchResultAdapter);
                         LinearLayoutManager layoutManager;
-                        layoutManager= new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
+                        layoutManager = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
                         searchRv.setLayoutManager(layoutManager);
                         suggestAdapter.notifyDataSetChanged();
                         //设置每一项的点击事件
@@ -388,6 +427,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
+
     /**
      * @return List<HotSongBean>
      * @description 初始化热搜榜数据
@@ -421,9 +461,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if(v==playIv){
+        if (v == playIv) {
             ServiceConnection connection;
-            if(isPlaying == 1){
+            if (isPlaying == 1) {
                 isPlaying = 0;
                 playIv.setImageResource(R.drawable.ic_play);
                 connection = new ServiceConnection() {
@@ -431,7 +471,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     public void onServiceConnected(ComponentName name, IBinder service) {
                         musicBinder = (MusicService.MusicBinder) service;
                         currentPosition = musicBinder.pauseMusic();
-                        Log.d(TAG,String.valueOf(currentPosition));
+                        Log.d(TAG, String.valueOf(currentPosition));
                     }
 
                     @Override
@@ -439,15 +479,14 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
                     }
                 };
-            }
-            else {
+            } else {
                 isPlaying = 1;
                 playIv.setImageResource(R.drawable.ic_puase);
                 connection = new ServiceConnection() {
                     @Override
                     public void onServiceConnected(ComponentName name, IBinder service) {
                         musicBinder = (MusicService.MusicBinder) service;
-                        Log.d(TAG,String.valueOf(currentPosition));
+                        Log.d(TAG, String.valueOf(currentPosition));
                         musicBinder.rePlayMusic(playingBean, currentPosition);
                     }
 
@@ -458,7 +497,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 };
             }
             Intent bindIntent = new Intent(SearchActivity.this, MusicService.class);
-            bindService(bindIntent,connection,BIND_AUTO_CREATE);
+            bindService(bindIntent, connection, BIND_AUTO_CREATE);
         }
 
         switch (v.getId()) {
